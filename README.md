@@ -15,3 +15,14 @@
 * [背景移动](http://www.jq22.com/yanshi6473)
 * [爆炸效果](http://www.jq22.com/yanshi6272)
 * [文字散开重组](http://www.jq22.com/yanshi6063)
+* [网站进入效果](http://www.jq22.com/yanshi4018)
+* [电影效果首页](http://www.jq22.com/yanshi4013)
+* [首屏全屏切换](http://www.jq22.com/yanshi3521)
+
+###整站系列###
+* [QQ浏览器mac](http://www.jq22.com/yanshi2590)
+* [仿QQ浏览器8主页](http://www.jq22.com/yanshi2549)
+* [一屏整站](http://www.jq22.com/yanshi3138)
+* [视觉滚动](http://www.jq22.com/yanshi1799)
+* [jquery.localscroll滚动切换视差](http://www.jq22.com/yanshi1665)
+* [360](http://www.jq22.com/yanshi1454)
