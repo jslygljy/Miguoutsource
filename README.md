@@ -5,3 +5,5 @@
 * [Effeckt.css](http://h5bp.github.io/Effeckt.css/)
 * [staff-picks](https://www.animatron.com/explore/staff-picks)
 * [snabbt.js](http://daniel-lundin.github.io/snabbt.js/)
+* [WOW](http://mynameismatthieu.com/WOW/)
+* [dynameicsjs](http://dynamicsjs.com/)
