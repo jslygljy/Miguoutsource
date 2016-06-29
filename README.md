@@ -11,7 +11,9 @@
 
 ###组件动画列表###
 * [三维网格](http://www.jq22.com/yanshi7612)
+* [过渡插件](http://www.jq22.com/yanshi550)
 * [loding](http://www.jq22.com/yanshi6675)
+* [loding2](http://www.jq22.com/yanshi880)
 * [背景移动](http://www.jq22.com/yanshi6473)
 * [爆炸效果](http://www.jq22.com/yanshi6272)
 * [文字散开重组](http://www.jq22.com/yanshi6063)
