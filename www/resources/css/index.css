@@ -1,0 +1,7 @@
+.content_logo li{display: inline-block;}
+.content_logo span{display: inline-block;vertical-align: top;}
+.logo_Q1{background-image: url(../images/logo_Q1.png);width:125px;height: 247px;}
+.logo_Q2{background-image: url(../images/logo_Q2.png);width:125px;height: 247px;}
+.logo_Q3{background-image: url(../images/logo_Q3.png);width:125px;height: 247px;}
+.logo_L{background-image: url(../images/logo_L.png);width:111px;height: 244px;}
+.logo_Y{background-image: url(../images/logo_Y.png);width:107px;height: 246px;}
