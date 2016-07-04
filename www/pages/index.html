@@ -3,21 +3,129 @@
 <head>
     <!-- Required meta tags-->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>首页</title>
-    <link rel="stylesheet" type="text/css" href="../resources/css/index.css">
     <link rel="stylesheet" type="text/css" href="../resources/css/base.css">
+    <link rel="stylesheet" type="text/css" href="../resources/css/index.css">
+    
 <body>
-    <ul class="content_logo">
-    	<li><span class="logo_Q1"></span></li>
-    	<li><span class="logo_L"></span></li>
-    	<li><span class="logo_Q2"></span></li>
-    	<li><span class="logo_Y"></span></li>
-    	<li><span class="logo_Q3"></span></li>
-    </ul>
+  <audio controls="controls" height="0" autoplay="false" width="0" style="display:none;">
+    <source src="resources/song.mp3" type="audio/mp3" />
+  <embed height="100" width="100" src="../resources/song.mp3" />
+  </audio>
+    <div class="w1000">
+      <a href="index.html" class="logo_left"></a>
+      <ul class="content_logo">
+      	<li class="logo_Q1"><span class="logoopacity lasttime1 hvr-grow"></span><label></label></li>
+      	<li class="logo_L"><span class="logoopacity lasttime2"></span></li>
+      	<li class="logo_Q2"><span class="logoopacity lasttime3 hvr-grow"></span><label></label></li>
+      	<li class="logo_Y"><span class="logoopacity lasttime4"></span></li>
+      	<li class="logo_Q3"><span class="logoopacity lasttime5 hvr-grow"></span><label></label></li>
+        <label class="content_park"></label>
+        <label class="content_bottom"></label>
+      </ul>
+      <div class="firsthidden">
+          <span class="titlefont"></span>
+          <div class="leftchontent">
+          <span class="chinafont"></span>
+          <span class="esfont"></span>
+          </div>
+      </div>
+      <div class="sedhidden">
+        <div class="sedhidden_left">
+            <span class="sedfont"></span>
+            <p style="margin-top:20px;padding-left: 10px;">7月10日，ALAYA Park 盛大开幕。<br>
+            去更高的天空，去更深的海底，<br>
+            ALAYA 等你来体验！</p>
+            <p style="margin-top:20px;"><i class="icon1"></i>深圳市 南山区 蛇口街道 荔枝园路9号</p>
+        </div>
+        <div class="sedhidden_right">
+            <p class="bottomline"><i class="icon1"></i>
+            Shenzhen nanshan shekou streets Lizhi 9<br>
+            Don t let your life slip through your fingers by<br>
+            living inthepast or for the future. By living<br>
+            your life one day at a time,youlive ALL the<br>
+            days of your life.
+            </p>
+        </div>
+      </div>
+      <div class="thirdhidden">
+          <span class="thirdfont"></span>
+          <div>
+            
+            <p class="disilbl">
+            <label class="logofont"></label>
+            即阿赖耶识，是本性与妄心的和合体，一切善恶种子寄托的所在。也有“我爱执<br>
+            藏”义。ALAYA中的三个字母“A”变形为三道拱门。即表达了“一生二、二生三、三生万物”，应<br>
+            ALAYA起源的本。二来，在帝视角看，是关闭的，装着不同的世界；又可以平层看，是充满无限<br>可能的半掩状态。可以是进去，也可是出来。<br>
+            此处并非指确实的三道门，而是指代了不论是做梦的人或造梦者，都将拥有许多选择。在
+            ALAYA之境，可去往不同的地方，做不同的梦，做想做的梦。
+            </p>
+          </div>
+          <span class="line"></span>
+          <p>
+            Don t let your life slip through your fingers by living inthepast or for the future. By living your life one day at a time,youlive ALL the days of your life.
+          </p>
+      </div>
+    </div>
     <script type="text/javascript" src="../resources/js/jquery.js"></script>
+    <script type="text/javascript">
+      /**
+ * 动态更改rem值
+ */
+!(function () {
+  var docEL = window.document.documentElement;
+  var tid;
+  function refushRem(){
+    var width = docEL.getBoundingClientRect().width;
+    docEL.style.fontSize = width / 6.4 + 'px';
+  };
+  window.addEventListener('resize',function(){
+    refushRem();
+  },false);
+  refushRem();
+})()
+    </script>
+    <script type="text/javascript">
+      /*   Logohover效果   */
+      $(".hvr-grow").hover(function(e){
+        $(".content_logo span").removeClass("logoopacity");
+      },function(){
+        $(".content_logo span").addClass("logoopacity");
+      });
+
+      /*  第一扇门点击     */
+      $(".lasttime1").click(function(){
+        $(".lasttime2,.lasttime3,.lasttime4,.lasttime5").removeClass("logoopacity").fadeOut();
+        $(".content_park,.content_bottom").hide();
+        $(".lasttime1").next("label").addClass("sorlltop border_bottom");
+        $(this).removeClass("logoopacity");
+        $(".firsthidden").show();
+        $(".titlefont").css({display:"inline-block"});
+        $(".leftchontent").animate({top:"0.35rem"});
+      })
+
+      /*  第二扇门点击     */
+      $(".lasttime3").click(function(){
+        $(".lasttime2,.lasttime1,.lasttime4,.lasttime5").removeClass("logoopacity").fadeOut();
+        $(".content_park,.content_bottom").hide();
+        $(".lasttime3").next("label").addClass("sorlltop border_bottom");
+        $(this).removeClass("logoopacity");
+        $(".sedhidden").show();
+        $(".sedhidden .sedhidden_left").animate({top:"0.2rem"});
+        $(".sedhidden .sedhidden_right").animate({bottom:"-0.65rem"});
+      })
+
+      /*  第三扇门点击     */
+      $(".lasttime5").click(function(){
+        $(".lasttime2,.lasttime3,.lasttime4,.lasttime1").removeClass("logoopacity").fadeOut();
+        $(".content_park,.content_bottom").hide();
+        $(".lasttime5").next("label").addClass("sorlltop border_bottom");
+        $(this).removeClass("logoopacity");
+        $(".thirdhidden").show();
+        $(".thirdhidden").animate({top:"0.6rem"});
+      })
+    </script>
 </body>
 
 </html>
