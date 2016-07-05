@@ -21,9 +21,11 @@
       	<li class="logo_Q2"><span class="logoopacity lasttime3 hvr-grow"></span><label></label></li>
       	<li class="logo_Y"><span class="logoopacity lasttime4"></span></li>
       	<li class="logo_Q3"><span class="logoopacity lasttime5 hvr-grow"></span><label></label></li>
-        <label class="content_park"></label>
-        <label class="content_bottom"></label>
       </ul>
+      <div class="index_bottom">
+          <label class="content_park"></label>
+          <label class="content_bottom"></label>
+      </div>
       <div class="firsthidden">
           <span class="titlefont"></span>
           <div class="leftchontent">
@@ -96,13 +98,14 @@
 
       /*  第一扇门点击     */
       $(".lasttime1").click(function(){
-        $(".lasttime2,.lasttime3,.lasttime4,.lasttime5").removeClass("logoopacity").fadeOut();
-        $(".content_park,.content_bottom").hide();
+        $(".lasttime2,.lasttime3,.lasttime4,.lasttime5").removeClass("logoopacity").hide();
+        $(".index_bottom").hide();
         $(".lasttime1").next("label").addClass("sorlltop border_bottom");
         $(this).removeClass("logoopacity");
         $(".firsthidden").show();
-        $(".titlefont").css({display:"inline-block"});
-        $(".leftchontent").animate({top:"0.35rem"});
+        $(".titlefont").fadeIn();
+        $(".leftchontent").css({top:"0.35rem",display:"block"})
+         
       })
 
       /*  第二扇门点击     */
@@ -125,6 +128,7 @@
         $(".thirdhidden").show();
         $(".thirdhidden").animate({top:"0.6rem"});
       })
+        
     </script>
 </body>
 
