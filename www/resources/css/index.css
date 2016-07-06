@@ -4,7 +4,7 @@ li{list-style: none;}
 
 .logo_left{background-image: url(../images/smalllogo.png);width: 71px;height: 25px;display: inline-block;    margin-top: 0.2rem;}
 .content_logo{margin-left: 10%;margin-top:10%;}
-.content_logo li{display: inline-block;margin-left:1%;vertical-align:top;position: relative;}
+.content_logo li{display: inline-block;margin-left:5%;vertical-align:top;position: relative;}
 .content_logo span{opacity: 0.8;display: inline-block;}
 .logo_Q1 span{background-image: url(../images/logo_Q1.png);width:125px;height: 247px;}
 .logo_L span{background-image: url(../images/logo_L.png);width:111px;height: 244px;}
@@ -136,19 +136,18 @@ opacity: 0.9;
 .content_park{    background-image: url(../images/park.png);
     width: 106px;
     height: 41px;
-    position: absolute;
-    left: 38%;
-    top: 0.3rem;}
+    margin:0.3rem auto 0.3rem;
+    display:block;
+  }
 .content_bottom{    background-image: url(../images/bottom.png);
     width: 679px;
     height: 36px;
-    position: absolute;
-    left: 9%;
-    top:0.8rem;}
+    margin:0.3rem auto 0rem;
+    display:block;}
 .firsthidden{display: none;    position: absolute;
     right: 1.2rem;
     width: 2.5rem;
-    top: 0.8rem;
+    top: 0.6rem;
 }
 .thirdhidden{display: none;position: absolute;left:1.5rem;width:2.5rem;}
 
@@ -170,13 +169,13 @@ opacity: 0.9;
 .icon1{background-image: url(../images/icon.png);width: 16px;height: 20px;display: inline-block;    vertical-align: middle;margin-right: 10px;}
 .bottomline{opacity: 0.7;line-height: 25px;}
 .leftchontent{
-  position: absolute;top: 0.5rem;display: none;
-  -webkit-transition: all ease 5s;
-  -o-transition: all ease 5s;
-  -moz-transition: all ease 5s;
-  transition: all ease 5s;
+  position: absolute;top: 0.5rem;opacity: 0;
+  -webkit-transition: all 0.5s ease-in;
+  -moz-transition: all 0.5s ease-in;
+  -o-transition: all 0.5s ease-in;
+  transition: all 0.5s ease-in;
 }
-.index_bottom{position: relative;}
+.index_bottom{position: relative;width:100%;}
 @media screen and (max-width:680px) {
   .w1000 {
     width:100%;

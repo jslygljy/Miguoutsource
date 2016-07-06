@@ -15,6 +15,7 @@
   </audio>
     <div class="w1000">
       <a href="index.html" class="logo_left"></a>
+      <div class="index_right">距离开幕还有<span></span>天</div>
       <ul class="content_logo">
       	<li class="logo_Q1"><span class="logoopacity lasttime1 hvr-grow"></span><label></label></li>
       	<li class="logo_L"><span class="logoopacity lasttime2"></span></li>
@@ -73,22 +74,32 @@
     <script type="text/javascript" src="../resources/js/jquery.js"></script>
     <script type="text/javascript">
       /**
- * 动态更改rem值
- */
-!(function () {
-  var docEL = window.document.documentElement;
-  var tid;
-  function refushRem(){
-    var width = docEL.getBoundingClientRect().width;
-    docEL.style.fontSize = width / 6.4 + 'px';
-  };
-  window.addEventListener('resize',function(){
-    refushRem();
-  },false);
-  refushRem();
-})()
+       * 动态更改rem值
+       */
+      !(function () {
+        var docEL = window.document.documentElement;
+        var tid;
+        function refushRem(){
+          var width = docEL.getBoundingClientRect().width;
+          docEL.style.fontSize = width / 6.4 + 'px';
+        };
+        window.addEventListener('resize',function(){
+          refushRem();
+        },false);
+        refushRem();
+      })()
     </script>
     <script type="text/javascript">
+      
+      if (new Date().getDate() == 6 && new Date().getDate()<10) {
+          var days = 10 - new Date().getDate();  
+          $(".index_right span").html(days)
+      }else{
+          $(".index_right span").html('')
+      }
+      var firstclick = true;
+      var sedclick = true;
+      var thirdclick = true;
       /*   Logohover效果   */
       $(".hvr-grow").hover(function(e){
         $(".content_logo span").removeClass("logoopacity");
@@ -98,35 +109,72 @@
 
       /*  第一扇门点击     */
       $(".lasttime1").click(function(){
-        $(".lasttime2,.lasttime3,.lasttime4,.lasttime5").removeClass("logoopacity").hide();
-        $(".index_bottom").hide();
-        $(".lasttime1").next("label").addClass("sorlltop border_bottom");
-        $(this).removeClass("logoopacity");
-        $(".firsthidden").show();
-        $(".titlefont").fadeIn();
-        $(".leftchontent").css({top:"0.35rem",display:"block"})
-         
+        if (firstclick) {
+          $(".lasttime2,.lasttime3,.lasttime4,.lasttime5").removeClass("logoopacity").hide();
+          $(".index_bottom").hide();
+          $(".lasttime1").next("label").addClass("sorlltop border_bottom");
+          $(this).removeClass("logoopacity");
+          $(".firsthidden").show();
+          $(".titlefont").fadeIn();
+          $(".leftchontent").css({top:"0.35rem",opacity:"1"});
+          firstclick = false;
+        }else{
+          $(".leftchontent").css({top:"0.5rem",opacity:"0"});
+          $(".titlefont").fadeOut();
+          $(".firsthidden").fadeOut();
+          $(this).addClass("logoopacity");
+          $(".lasttime1").next("label").removeClass("sorlltop border_bottom");
+          setTimeout(first,400)
+          function first(){
+            $(".index_bottom").fadeIn();
+            $(".lasttime2,.lasttime3,.lasttime4,.lasttime5").fadeIn().addClass("logoopacity");
+          }
+          firstclick = true;
+        }  
       })
 
       /*  第二扇门点击     */
       $(".lasttime3").click(function(){
-        $(".lasttime2,.lasttime1,.lasttime4,.lasttime5").removeClass("logoopacity").fadeOut();
-        $(".content_park,.content_bottom").hide();
-        $(".lasttime3").next("label").addClass("sorlltop border_bottom");
-        $(this).removeClass("logoopacity");
-        $(".sedhidden").show();
-        $(".sedhidden .sedhidden_left").animate({top:"0.2rem"});
-        $(".sedhidden .sedhidden_right").animate({bottom:"-0.65rem"});
+        if(sedclick){
+          $(".lasttime2,.lasttime1,.lasttime4,.lasttime5").removeClass("logoopacity").css("visibility","hidden");
+          $(".content_park,.content_bottom").hide();
+          $(".lasttime3").next("label").addClass("sorlltop border_bottom");
+          $(this).removeClass("logoopacity");
+          $(".sedhidden").show();
+          $(".sedhidden .sedhidden_left").animate({top:"0.2rem"});
+          $(".sedhidden .sedhidden_right").animate({bottom:"-0.65rem"});
+          sedclick = false;
+        }else{
+          $(".lasttime2,.lasttime1,.lasttime4,.lasttime5").removeClass("logoopacity").fadeOut();
+          $(".content_park,.content_bottom").hide();
+          $(".lasttime3").next("label").addClass("sorlltop border_bottom");
+          $(this).removeClass("logoopacity");
+          $(".sedhidden").show();
+          $(".sedhidden .sedhidden_left").animate({top:"0.2rem"});
+          $(".sedhidden .sedhidden_right").animate({bottom:"-0.65rem"});
+          sedclick = true;
+        }
       })
 
       /*  第三扇门点击     */
       $(".lasttime5").click(function(){
-        $(".lasttime2,.lasttime3,.lasttime4,.lasttime1").removeClass("logoopacity").fadeOut();
-        $(".content_park,.content_bottom").hide();
-        $(".lasttime5").next("label").addClass("sorlltop border_bottom");
-        $(this).removeClass("logoopacity");
-        $(".thirdhidden").show();
-        $(".thirdhidden").animate({top:"0.6rem"});
+        if (thirdclick) {
+          $(".lasttime2,.lasttime3,.lasttime4,.lasttime1").removeClass("logoopacity").fadeOut();
+          $(".content_park,.content_bottom").hide();
+          $(".lasttime5").next("label").addClass("sorlltop border_bottom");
+          $(this).removeClass("logoopacity");
+          $(".thirdhidden").show();
+          $(".thirdhidden").animate({top:"0.6rem"});
+          thirdclick = false;
+        }else{
+          $(".lasttime2,.lasttime3,.lasttime4,.lasttime1").removeClass("logoopacity").fadeOut();
+          $(".content_park,.content_bottom").hide();
+          $(".lasttime5").next("label").addClass("sorlltop border_bottom");
+          $(this).removeClass("logoopacity");
+          $(".thirdhidden").show();
+          $(".thirdhidden").animate({top:"0.6rem"});
+          thirdclick = true;
+        }
       })
         
     </script>
