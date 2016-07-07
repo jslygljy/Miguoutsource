@@ -7,7 +7,6 @@
     <title>首页</title>
     <link rel="stylesheet" type="text/css" href="../resources/css/base.css">
     <link rel="stylesheet" type="text/css" href="../resources/css/index.css">
-    
 <body>
   <audio controls="controls" height="0" autoplay="false" width="0" style="display:none;">
     <source src="resources/song.mp3" type="audio/mp3" />
@@ -30,8 +29,15 @@
       <div class="firsthidden">
           <span class="titlefont"></span>
           <div class="leftchontent">
-          <span class="chinafont"></span>
-          <span class="esfont"></span>
+            <p>
+              随着VR技术在全球范围内的兴起，深圳奥境文化文化科技有限公司（后均称为ALAYA之境）<br>
+              于2016年5月19日成立。公司致力于造梦给人，人人造梦的初心，连接虚拟和现实，能<br>
+              够在奥境醒着做梦。ALAYA Park作为线下体验场馆将向各位开放。
+            </p>
+            <p class="first_es">
+              Don t let your life slip through your fingers by living inthepast or for the future. By living<br>
+              your life one day at a time,youlive ALL the days of your life.
+            </p>
           </div>
       </div>
       <div class="sedhidden">
@@ -54,8 +60,7 @@
       </div>
       <div class="thirdhidden">
           <span class="thirdfont"></span>
-          <div>
-            
+          <div style="width:100%">
             <p class="disilbl">
             <label class="logofont"></label>
             即阿赖耶识，是本性与妄心的和合体，一切善恶种子寄托的所在。也有“我爱执<br>
@@ -66,7 +71,7 @@
             </p>
           </div>
           <span class="line"></span>
-          <p>
+          <p class="dises">
             Don t let your life slip through your fingers by living inthepast or for the future. By living your life one day at a time,youlive ALL the days of your life.
           </p>
       </div>
@@ -90,12 +95,12 @@
       })()
     </script>
     <script type="text/javascript">
-      
-      if (new Date().getDate() == 6 && new Date().getDate()<10) {
-          var days = 10 - new Date().getDate();  
+    /*  倒计时  */
+      if (new Date().getMonth() == 6 && new Date().getDate()<10) {
+          var days = 10 - new Date().getDate();
           $(".index_right span").html(days)
       }else{
-          $(".index_right span").html('')
+          $(".index_right").hide();
       }
       var firstclick = true;
       var sedclick = true;
@@ -116,7 +121,11 @@
           $(this).removeClass("logoopacity");
           $(".firsthidden").show();
           $(".titlefont").fadeIn();
-          $(".leftchontent").css({top:"0.35rem",opacity:"1"});
+          if ($(window).width()<1200) {
+            $(".leftchontent").css({top:"1.5rem",opacity:"1"});
+          }else{
+            $(".leftchontent").css({top:"0.35rem",opacity:"1"});
+          }
           firstclick = false;
         }else{
           $(".leftchontent").css({top:"0.5rem",opacity:"0"});
@@ -130,53 +139,83 @@
             $(".lasttime2,.lasttime3,.lasttime4,.lasttime5").fadeIn().addClass("logoopacity");
           }
           firstclick = true;
-        }  
+        }
       })
 
       /*  第二扇门点击     */
       $(".lasttime3").click(function(){
         if(sedclick){
-          $(".lasttime2,.lasttime1,.lasttime4,.lasttime5").removeClass("logoopacity").css("visibility","hidden");
+          $(".lasttime2,.lasttime1,.lasttime4,.lasttime5").removeClass("logoopacity").hide();
+          $(".logo_Q2").css("margin-left",'236px');
           $(".content_park,.content_bottom").hide();
           $(".lasttime3").next("label").addClass("sorlltop border_bottom");
           $(this).removeClass("logoopacity");
           $(".sedhidden").show();
-          $(".sedhidden .sedhidden_left").animate({top:"0.2rem"});
-          $(".sedhidden .sedhidden_right").animate({bottom:"-0.65rem"});
+          if ($(window).width()<1200) {
+            $(".logo_Q2").css("margin-left",'1.78rem');
+            $(".sedhidden .sedhidden_left").animate({top:"-1rem"});
+          }else{
+            $(".sedhidden .sedhidden_left").animate({top:"-0.5rem"});
+            $(".sedhidden .sedhidden_right").animate({top:"-0.5rem"});
+          }
           sedclick = false;
         }else{
-          $(".lasttime2,.lasttime1,.lasttime4,.lasttime5").removeClass("logoopacity").fadeOut();
-          $(".content_park,.content_bottom").hide();
-          $(".lasttime3").next("label").addClass("sorlltop border_bottom");
-          $(this).removeClass("logoopacity");
-          $(".sedhidden").show();
-          $(".sedhidden .sedhidden_left").animate({top:"0.2rem"});
-          $(".sedhidden .sedhidden_right").animate({bottom:"-0.65rem"});
+          $(".sedhidden .sedhidden_left").animate({top:"-1.2rem"});
+          $(".sedhidden .sedhidden_right").animate({top:"-0.2rem"});
+          $(".sedhidden").fadeOut();
+
+          $(this).addClass("logoopacity");
+          $(".lasttime3").next("label").removeClass("sorlltop border_bottom");
+          setTimeout(sed,400)
+          function sed(){
+            if ($(window).width()<1200) {
+              $(".logo_Q2").css("margin-left",'0.45rem');
+            }else{
+              $(".logo_Q2").css("margin-left",'0px');
+            }
+            
+            $(".content_park,.content_bottom").fadeIn();
+            $(".lasttime2,.lasttime1,.lasttime4,.lasttime5").fadeIn().addClass("logoopacity");
+          }
           sedclick = true;
         }
       })
 
       /*  第三扇门点击     */
-      $(".lasttime5").click(function(){
+      $(".logo_Q3").click(function(){
         if (thirdclick) {
-          $(".lasttime2,.lasttime3,.lasttime4,.lasttime1").removeClass("logoopacity").fadeOut();
+          $(".lasttime2,.lasttime3,.lasttime4,.lasttime1").removeClass("logoopacity").hide();
+          $(".logo_Q3").css("margin-left",'468px');
           $(".content_park,.content_bottom").hide();
           $(".lasttime5").next("label").addClass("sorlltop border_bottom");
           $(this).removeClass("logoopacity");
           $(".thirdhidden").show();
-          $(".thirdhidden").animate({top:"0.6rem"});
+          if ($(window).width()<1200) {
+              $(".logo_Q3").css("margin-left",'3.5rem');
+              $(".thirdhidden").animate({top:"2.8rem"});
+          }else{
+              $(".thirdhidden").animate({top:"0.5rem"});
+          }
           thirdclick = false;
         }else{
-          $(".lasttime2,.lasttime3,.lasttime4,.lasttime1").removeClass("logoopacity").fadeOut();
-          $(".content_park,.content_bottom").hide();
-          $(".lasttime5").next("label").addClass("sorlltop border_bottom");
-          $(this).removeClass("logoopacity");
-          $(".thirdhidden").show();
-          $(".thirdhidden").animate({top:"0.6rem"});
+          $(".thirdhidden").fadeOut();
+          $(this).addClass("logoopacity");
+          $(".lasttime5").next("label").removeClass("sorlltop border_bottom");
+          setTimeout(third,400)
+          function third(){
+            if ($(window).width()<1200) {
+              $(".logo_Q3").css("margin-left",'0.45rem');
+            }else{
+              $(".logo_Q3").css("margin-left",'0px');
+            }
+            
+            $(".lasttime2,.lasttime3,.lasttime4,.lasttime1").fadeIn().addClass("logoopacity");
+            $(".content_park,.content_bottom").fadeIn();
+            $(".thirdhidden").css({top:"0.3rem"});
+          }
           thirdclick = true;
         }
       })
-        
     </script>
 </body>
 
