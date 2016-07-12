@@ -128,7 +128,7 @@ iphone 6的是实际宽度是375 * 667 ;
 
 在750Px设计图切出来的Icon比如说是85 * 85;
 
-那我们给这个icon设置样式就是 width: 85/75;height:85/75
+那我们给这个icon设置样式就是 width: 85/75 rem;height:85/75 rem
 
 <b>CSSREM</b>
 
