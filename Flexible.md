@@ -118,7 +118,7 @@ CSS像素是一个抽像的单位，主要使用在浏览器上，用来精确�
 	1a   = 7.5px
 	1rem = 75px 	
 ```
-那么我们这个示例的稿子就分成了10a，也就是整个宽度为10rem，<html>对应的font-size为75px
+那么我们这个示例的稿子就分成了10a，也就是整个宽度为10rem，`<html>`对应的font-size为75px
 
 iphone 6的是实际宽度是375 * 667 ;
 
@@ -130,9 +130,9 @@ iphone 6的是实际宽度是375 * 667 ;
 
 那我们给这个icon设置样式就是 width: 85/75 rem;height:85/75 rem
 
-<b>CSSREM</b>
+**CSSREM**
 
-<p>[CSSREM](https://github.com/flashlizi/cssrem)是一个CSS的px值转rem值的Sublime Text3自动完成插件。</p>
+[CSSREM](https://github.com/flashlizi/cssrem)是一个CSS的px值转rem值的Sublime Text3自动完成插件。
 插件的效果：
 
 ![CSSREM](https://camo.githubusercontent.com/7bc50fa37be4ada5d263152a107125a216a6936c/687474703a2f2f7777772e773363706c75732e636f6d2f73697465732f64656661756c742f66696c65732f626c6f67732f323031352f313531312f63737372656d2e676966)

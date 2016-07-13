@@ -3,6 +3,7 @@ git项目
 * [css3引擎](https://github.com/shrekshrek/css3d-engine)
 * [陀螺仪](https://github.com/shrekshrek/orienter)
 * [movejs](http://visionmedia.github.io/move.js/)
+* [anime动画](https://github.com/juliangarnier/anime)
 ###常用###
 * [动画库](https://www.awesomes.cn/repos/Dom/animation)
 * [demo动画](http://output.jsbin.com/kixir/1/)
