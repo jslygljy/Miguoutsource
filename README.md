@@ -4,6 +4,7 @@ git项目
 * [陀螺仪](https://github.com/shrekshrek/orienter)
 * [movejs](http://visionmedia.github.io/move.js/)
 * [anime动画](https://github.com/juliangarnier/anime)
+* [banner](http://www.jq22.com/yanshi1754)
 ###常用###
 * [动画库](https://www.awesomes.cn/repos/Dom/animation)
 * [demo动画](http://output.jsbin.com/kixir/1/)
