@@ -7,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="../resources/css/base.css">
     <link rel="stylesheet" type="text/css" href="../resources/css/index.css">
     <link rel="stylesheet" type="text/css" href="../resources/plugin/jquery.fullPage.css"> 
+    <link rel="stylesheet" type="text/css" href="../resources/css/idangerous.swiper.css">
 </head>
   <body>
       <div id="menu">
@@ -29,19 +30,21 @@
             <a class="see" href="">See More</a>
         </div>
         <div class="section" id="section1">
-            
-            <!-- 代码部分begin -->
-            <div id="focusBar"> 
-              <a href="javascript:void(0)" class="arrL" onclick="prePage()"></a>
-              <a href="javascript:void(0)" class="arrR" onclick="nextPage()"></a>
-              <ul class="mypng">
-                <li id="focusIndex1" style="background:url(../resources/images/banner1.png) no-repeat center center; display:block;"><!--此处需判断li的display:block-->
-                  <div class="focusL"><label>“这是一场弥漫着黑暗气息的梦境，但我却不愿醒来，即使这里的空气令我颤栗，我却始终在寻找着…因为深爱的她，我那失踪的妻子，曾迷失在这里，无论将要面临什么，我都要带她回家。我的爱与呼吸，将伴随她的灵魂存在，你会愿意陪我找到她吗…”<label></div>
-                </li>
-                <li id="focusIndex2" style="background:url(../resources/images/banner1.png) no-repeat center center; display:none;">
-                    <div class="focusL"><label>“sd附近的开始理解方式的减肥了开始大家了看法是多久了开发的时间了开始放多久了开发商的离开理解离开离开”<label></div>
-                </li>
-              </ul>
+            <div class="device">
+              <a class="arrow-left" href="#"></a> 
+              <a class="arrow-right" href="#"></a>
+              <div class="swiper-container">
+                <div class="swiper-wrapper">
+                  <div class="swiper-slide">
+                    <img src="../resources/images/banner1.png">
+                    <div class="focusL"><label>“这是一场弥漫着黑暗气息的梦境，但我却不愿醒来，即使这里的空气令我颤栗，我却始终在寻找着…因为深爱的她，我那失踪的妻子，曾迷失在这里，无论将要面临什么，我都要带她回家。我的爱与呼吸，将伴随她的灵魂存在，你会愿意陪我找到她吗…”<label></div>
+                  </div>
+                  <div class="swiper-slide">
+                    <div>飞机迪斯科浪费就打算立刻解放了迪斯科解放简历库</div>
+                  </div>
+                </div>
+              </div>
+              <div class="pagination"></div>
             </div>
 
             <ul class="new_list">
@@ -188,6 +191,7 @@
       <script type="text/javascript" src="../resources/plugin/jquery-ui.min.js"></script>
 
       <script type="text/javascript" src="../resources/plugin/jquery.fullPage.js"></script>
+      <script type="text/javascript" src="../resources/plugin/idangerous.swiper.min.js"></script>
       <script type="text/javascript">
         $(document).ready(function() {
           $('#fullpage').fullpage({
@@ -195,10 +199,37 @@
             menu: '#menu',
             anchors: ['firstPage', 'secondPage', '3rdPage', '4rdPage', '5rdPage', '6rdPage'],
           });
+
+          var mySwiper = new Swiper('.swiper-container',{
+            grabCursor: true,
+            paginationClickable: true
+          })
+          $('.arrow-left').on('click', function(e){
+            e.preventDefault()
+            mySwiper.swipePrev()
+          })
+          $('.arrow-right').on('click', function(e){
+            e.preventDefault()
+            mySwiper.swipeNext()
+          })
+
+
+          /*------focus-------*/
+          $(".device").hover(
+            function () {
+              $(".arrow-left").stop(false,true);
+              $(".arrow-right").stop(false,true);
+              $(".arrow-left").animate({ left: 0}, { duration: 500 });
+              $(".arrow-right").animate({ right: 0}, { duration: 500 });
+            }, function () {
+              $(".arrow-left").stop(false,true);
+              $(".arrow-right").stop(false,true);
+              $(".arrow-left").animate({ left: -52}, { duration: 500 });
+              $(".arrow-right").animate({ right: -52}, { duration: 500 });
+            }
+          );
         });
       </script>
-      <script type="text/javascript" src="../resources/plugin/jquery.easing.1.3.js"></script>
-      <script type="text/javascript" src="../resources/plugin/sucaijiayuan.js"></script>
   </body>
   
 </html>

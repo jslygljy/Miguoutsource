@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Required meta tags-->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>关于我们</title>
+    <link rel="stylesheet" type="text/css" href="../resources/css/base.css">
+    <link rel="stylesheet" type="text/css" href="../resources/plugin/grid-accordion.css">
+    <link rel="stylesheet" type="text/css" href="../resources/plugin/grid-accordion-example1.css">
+
+    <body>
+        <ul class="accordion">
+            <li>
+                <img src="../resources/photo/1.jpg" alt="" />
+            </li>
+            <li>
+                <img src="../resources/photo/2.jpg" alt="" /></li>
+            <li>
+                <img src="../resources/photo/3.jpg" alt="" /> </li>
+            <li>
+                <img src="../resources/photo/4.jpg" alt="" /> </li>
+            <li>
+                <img src="../resources/photo/5.jpg" alt="" />
+            </li>
+            <li>
+                <img src="../resources/photo/6.jpg" alt="" /> </li>
+            <li>
+                <img src="../resources/photo/7.jpg" alt="" /> </li>
+            <li>
+                <img src="../resources/photo/8.jpg" alt="" />
+            </li>
+            <li>
+                <img src="../resources/photo/9.jpg" alt="" />
+            </li>
+            <li>
+                <img src="../resources/photo/10.jpg" alt="" /> </li>
+            <li>
+                <img src="../resources/photo/11.jpg" alt="" /> </li>
+            <li>
+                <img src="../resources/photo/12.jpg" alt="" />
+            </li>
+        </ul>
+        <script type="text/javascript" src="../resources/js/jquery-1.10.2.min.js"></script>
+        <script type="text/javascript">
+        jQuery(document).ready(function($) {
+
+            $('.accordion').gridAccordion({
+                width: 960,
+
+                height: 680,
+
+                columns:6,
+
+                distance: 2,
+
+                closedPanelWidth:4,
+
+                closedPanelHeight:4,
+
+                alignType: 'centerCenter',
+
+                slideshow: true,
+
+                panelProperties: {
+
+                    0: {
+                        captionWidth: 200,
+                        captionHeight: 200,
+                        captionTop: 30,
+                        captionLeft: 30
+                    },
+
+                    4: {
+                        captionWidth: 200,
+                        captionHeight: 200,
+                        captionTop: 30,
+                        captionLeft: 650
+                    },
+
+                    7: {
+                        captionWidth: 200,
+                        captionHeight: 200,
+                        captionTop:30,
+                        captionLeft:100
+                    },
+
+                    8: {
+                        captionWidth: 200,
+                        captionHeight: 200,
+                        captionTop:500,
+                        captionLeft:100
+                    },
+
+                    11:{
+                        captionWidth: 200,
+                        captionHeight: 200,
+                        captionTop:500,
+                        captionLeft:100
+                    }
+
+                }
+            });
+
+        });
+        </script>
+        <script type="text/javascript" src="../resources/plugin/jquery.gridAccordion.min.js"></script>
+    </body>
+
+</html>
