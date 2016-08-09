@@ -1,0 +1,146 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>团队介绍页面</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="apple-touch-icon" href="apple-touch-icon.png">
+        <!-- Place favicon.ico in the root directory -->
+
+        <link rel="stylesheet" href="css/normalize.css">
+        <link rel="stylesheet" type="text/css" href="css/other.css">
+        <link rel="stylesheet" type="text/css" href="css/jquery.fullPage.css">
+        <link rel="stylesheet" type="text/css" href="css/idangerous.swiper.css">
+        <style media="screen">
+        .swiper-slide {
+          text-align: center;
+          font-size: 18px;
+          width:400px;
+
+          /* Center slide text vertically */
+          display: -webkit-box;
+          display: -ms-flexbox;
+          display: -webkit-flex;
+          display: flex;
+          -webkit-box-pack: center;
+          -ms-flex-pack: center;
+          -webkit-justify-content: center;
+          justify-content: center;
+          -webkit-box-align: center;
+          -ms-flex-align: center;
+          -webkit-align-items: center;
+          align-items: center;
+      }
+        </style>
+    </head>
+  <body>
+      <div id="menu">
+          <img src="../resources/images/nav_logo.png">
+          <ul>
+            <li data-menuanchor="firstPage" class="active"><a href="#firstPage">首页</a></li>
+            <li data-menuanchor="secondPage"><a href="#secondPage">关于ALAYA</a></li>
+            <li data-menuanchor="3rdPage"><a href="#3rdPage">内容与体验</a></li>
+            <li data-menuanchor="4rdPage"><a href="#3rdPage">造梦师</a></li>
+            <li data-menuanchor="5rdPage"><a href="#3rdPage">媒体报道</a></li>
+            <li data-menuanchor="6rdPage"><a href="#3rdPage">关于我们</a></li>
+          </ul>
+      </div>
+      <!--  详细介绍页面大banner  -->
+      <div class="bigbanner">
+
+      </div>
+
+      <!-- 居中内容区  -->
+      <div class="w1000">
+
+        <div class="posterleft"></div>
+
+        <div class="posterright">
+          <div class="postertitle">奥境VR体验首作《灵·月蚀》</div>
+          <div class="gameteam">
+            <span>创作团队 :</span>
+            <p>上海锐瞳网络科技有限公司-KeenVision-VR|AR</p>
+          </div>
+          <div class="gamevideo">
+            <span class="gamespangrey">1个视频>></span>
+            <div id="myModal" class="reveal-modal">
+  						<a class="close-reveal-modal">×</a>
+  					</div>
+            <a href="#" data-reveal-id="myModal"><img class="sliderimg" src="photo/1.jpg" alt="" style="height:247px;margin: 44px 10px 103px 131px;width: 470px;"></a>
+          </div>
+        </div>
+
+        <div class="gamephoto">
+          <span class="gamespangrey">1个照片>></span>
+          <div class="swiper-container">
+            <div class="swiper-wrapper">
+              <div class="swiper-slide">
+                <img src="images/banner1.png">
+              </div>
+              <div class="swiper-slide">
+                <img src="images/banner1.png">
+              </div>
+              <div class="swiper-slide">
+                <img src="images/banner1.png">
+              </div>
+              <div class="swiper-slide">
+                <img src="images/banner1.png">
+              </div>
+              <div class="swiper-slide">
+                <img src="images/banner1.png">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="gamenewlist">
+            <span class="gamespangrey">精选体验测评>></span>
+            <div class="newlist">
+              <div class="listleft">
+                <span>Top1</span>
+                <p class="leftitle">从游戏到VR ——创意改变世界</p>
+                <img src="" alt="">
+              </div>
+
+              <div class="listright">
+                <p>“ 现实这么残酷，挤公交，租房子，宿舍里乱糟糟。但是一戴上VR头盔，屌丝的生活场景被彻底颠覆：阳光海滩、香车美女应有尽有；飞机、游艇更是信手拈来……一半虚拟，一半现实，未来的世界是可以相互打通、相互关联的，VR将颠覆传统社交模式。”作为一名在游戏行业摸爬滚打了16年的老“极客”，北京极乐互动科技有限公司（下称“极乐互动”）CEO崔海庆近日在接受《中外管理》专访时，谈起他的VR“社交帝国”，兴致勃勃。“现实这么残酷，挤公交，租房子，宿舍里乱糟糟。</p>
+                <span class="newTime">2014-02-16 19:57</span>
+              </div>
+            </div>
+        </div>
+
+        <div class="othernew">
+            <span class="gamespangrey">其他测评>></span>
+            <div class="otherleft">
+              <img src="" alt="">
+              <p class="othertitle">最棒的VR体验</p>
+              <p class="otherp">我去了最高的山上，最沈的海底。这个VR体验真的太棒了！我去了最高的山上，最沈的海底。这个VR体验真的太棒了！我去了最高的山上，最沈的海底。这个VR体验真的太棒了！我去了最高的山上，最沈的海底。这个VR体验真的太棒了！我去了最高的山上，最沈的海底。这个VR体验真的太棒了！</p>
+            </div>
+        </div>
+      </div>
+
+      <script src="js/vendor/jquery-1.12.0.min.js"></script>
+      <script type="text/javascript" src="js/vendor/idangerous.swiper.min.js"></script>
+      <!-- 弹出层+播放视频   -->
+      <script type="text/javascript" src="js/vendor/jquery.reveal.js"></script>
+      <script type="text/javascript" src="js/vendor/jquery.media.js"></script>
+      <script type="text/javascript">
+        $(function(){
+        	var media1 = '<a class="media" href="http://static1.mtime.cn/20160720105244/flash/newvideoplayer.swf?vid=57460&autoplay=1&w=1000&h=563"></a>';
+        	$('.sliderimg').bind("click",function(){
+        		$('#myModal').prepend(media1);
+        		$('.media').media({ width:600, height:450});
+        	});
+
+          var swiper = new Swiper('.swiper-container', {
+              slidesPerView: 'auto',
+              centeredSlides: true
+          });
+        });
+      </script>
+  </body>
+
+</html>
