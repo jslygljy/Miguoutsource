@@ -1,0 +1,42 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>新闻详细</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="apple-touch-icon" href="apple-touch-icon.png">
+        <!-- Place favicon.ico in the root directory -->
+
+        <link rel="stylesheet" href="css/normalize.css">
+        <link rel="stylesheet" type="text/css" href="css/other.css">
+        <link rel="stylesheet" type="text/css" href="css/jquery.fullPage.css">
+        <link rel="stylesheet" type="text/css" href="css/idangerous.swiper.css">
+    </head>
+    <body>
+        <div id="menu">
+            <img src="images/nav_logo.png">
+            <ul>
+              <li data-menuanchor="firstPage" class="active"><a href="#firstPage">首页</a></li>
+              <li data-menuanchor="secondPage"><a href="#secondPage">关于ALAYA</a></li>
+              <li data-menuanchor="3rdPage"><a href="#3rdPage">内容与体验</a></li>
+              <li data-menuanchor="4rdPage"><a href="#3rdPage">造梦师</a></li>
+              <li data-menuanchor="5rdPage"><a href="#3rdPage">媒体报道</a></li>
+              <li data-menuanchor="6rdPage"><a href="#3rdPage">关于我们</a></li>
+            </ul>
+        </div>
+
+
+        <script src="js/vendor/jquery-1.12.0.min.js"></script>
+        <script type="text/javascript" src="js/vendor/idangerous.swiper.min.js"></script>
+        <script type="text/javascript">
+          var mySwiper = new Swiper('.swiper-container',{
+            grabCursor: true,
+            paginationClickable: true
+          })
+        </script>
+    </body>
+
+</html>

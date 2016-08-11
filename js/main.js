@@ -6,7 +6,7 @@ $(document).ready(function() {
     });
 
     // 首页banner
-    var mySwiper = new Swiper('.swiper-container', {
+    var mySwiper = new Swiper('#index_product', {
         grabCursor: true,
         paginationClickable: true
     })
@@ -51,4 +51,47 @@ $(document).ready(function() {
             });
         }
     );
+
+    // 团队详细左边
+    var mySwiper2 = new Swiper('#teamdetail', {
+        grabCursor: true,
+        paginationClickable: true
+    })
+
+    var mySwiper3 = new Swiper('#teamproduct', {
+        grabCursor: true,
+        paginationClickable: true
+    })
+
+    var media1 = '<a class="media" href="http://static1.mtime.cn/20160720105244/flash/newvideoplayer.swf?vid=57460&autoplay=1&w=1000&h=563"></a>';
+    $('.sliderimg').bind("click", function() {
+        $('#myModal1').prepend(media1);
+        $('.media').media({
+            width: 600,
+            height: 450
+        });
+    });
+    var media2 = '<a class="media" href="http://static1.mtime.cn/20160720105244/flash/newvideoplayer.swf?vid=57460&autoplay=1&w=1000&h=563"></a>';
+    $('.sliderimg2').bind("click", function() {
+        $('#myModal1').prepend(media2);
+        $('.media').media({
+            width: 600,
+            height: 450
+        });
+    });
+
+    //产品详细介绍页面
+    var mySwiper4 = new Swiper('#productdetail', {
+        grabCursor: true,
+        paginationClickable: true
+    })
+    var mySwiper5 = new Swiper('#productlist', {
+        grabCursor: true,
+        paginationClickable: true
+    })
+    var mySwiper5 = new Swiper('#productimglist', {
+        grabCursor: true,
+        paginationClickable: true
+    })
+
 });
