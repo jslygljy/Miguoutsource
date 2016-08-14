@@ -179,7 +179,12 @@ body {
 /*-----------------*/
 /***** 产品 图片hover  *****/
 /*-----------------*/
-
+#section2 .left_view,.right_view{    position: relative;}
+#section2 figcaption{ position: absolute;
+    left: 43px;
+    top: 19px;
+    width: 564px;
+    height: 363px;}
 figure.effect-selena {
 	padding: 3px;
 }
@@ -191,9 +196,22 @@ figure.effect-selena img {
 	-webkit-transform-origin: 50% 50%;
 	transform-origin: 50% 50%;
 }
+figure h2{	background-color:#6b1723;width: 247px;height: 54px;line-height: 54px;color: #fff;
+text-align: center;font-size: 23px;opacity: 0;margin-left: 20px;}
 figure.effect-selena:hover{
-	border: 3px #c4192c solid;
+	border: 5px #c4192c solid;
 	padding: 0px
+}
+figure.effect-selena:hover figcaption h2{
+	opacity: 1
+}
+figure.effect-selena:hover figcaption{
+  position: absolute;
+  left: 43px;
+  top: 19px;
+  width: 564px;
+  height: 363px;
+background-color:rgba(255, 255, 255, 0.5);
 }
 figure.effect-selena:hover img {
 	-webkit-transform: scale3d(0.95,0.95,1);
@@ -209,9 +227,7 @@ figure.effect-selena span {
 }
 
 figure.effect-selena p {
-	background-color:#6b1723;width: 247px;height: 54px;line-height: 54px;color: #fff;
-text-align: center;font-size: 23px;position: absolute;right: 0px;bottom: 0px;
-	opacity: 0;
+	opacity: 1;
 	-webkit-transition: opacity 0.35s, -webkit-transform 0.35s;
 	transition: opacity 0.35s, transform 0.35s;
 	-webkit-transform: perspective(1000px) rotate3d(1,0,0,90deg);
@@ -322,16 +338,14 @@ figure.effect-selena:hover p {
 .right_view {
     display: inline-block;
     width:43%;
-    margin-top: 5%;
     height: 360px;
+    vertical-align: top;
 }
 
 .left_view {
     display: inline-block;
     width: 43%;
     vertical-align: top;
-    margin-top: 5%;
-    margin-right: 2%
 }
 
 

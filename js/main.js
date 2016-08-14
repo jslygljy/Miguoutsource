@@ -89,9 +89,12 @@ $(document).ready(function() {
         grabCursor: true,
         paginationClickable: true
     })
-    var mySwiper5 = new Swiper('#productimglist', {
-        grabCursor: true,
-        paginationClickable: true
+
+    var mySwiper5 = new Swiper('#productimglist',{
+      scrollContainer: true,
+      scrollbar: {
+        container: '.swiper-scrollbar'
+      }
     })
 
 });
