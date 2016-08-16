@@ -204,9 +204,7 @@
     uploader.on( 'uploadComplete', function( file ) {
         $( '#'+file.id ).find('.progress').remove();
     });
-
     if (getid('id')) {
-
       $.ajax({
           type: "get",
           url: "http://139.196.237.72:3010/api/v1/heads/"+getid('id')+"",
@@ -271,7 +269,6 @@
         });
       })
     }
-
     </script>
   </body>
 </html>

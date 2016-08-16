@@ -554,30 +554,80 @@ jQuery(function() {
     });
 });
 
+if (getid('id')) {
+  $.ajax({
+      type: "get",
+      url: "http://139.196.237.72:3010/api/v1/teams/"+getid('id')+"",
+      success: function(res) {
+        setTimeout(function(){
+            $("#teamname").val(res.data[0].name);
+            UE.getEditor('newintroduction').setContent(res.data[0].introduction);
+            UE.getEditor('myEditor').setContent(res.data[0].about);
 
-    $("#save").click(function(){
-      $.ajax({
-          type: "post",
-          //timeout: 2000,
-          async: false,
-          data:{
-            name:$("#teamname").val(),
-            introduction:UE.getEditor('newintroduction').getContent(),
-            about:UE.getEditor('myEditor').getContent(),
-            posterimg:window.photoimg.join(','),
-            logo:window.logoimg.join(','),
-            imgs:window.teamsimg.join(','),
-            videos:window.teamsvideo.join(',')
-          },
-          url: "http://139.196.237.72:3010/api/v1/teams",
-          success: function(res) {
-              console.log(res)
-          },
-          error: function(err) {
-              //alert(JSON.stringify(err));
-          }
-      });
-    })
+            $("#uploader-demo").html('<img src='+ res.data[0].posterimg +'>');
+            window.photoimg = [res.data[0].posterimg];
+
+            $("#uploader-logo").html('<img src='+ res.data[0].logo +'>');
+            window.logoimg = [res.data[0].logo];
+
+            $("#uploader-img").html('<img src='+ res.data[0].imgs +'>');
+            window.teamsimg = [res.data[0].imgs];
+
+            $("#uploader").html('<img src='+ res.data[0].videos +'>');
+            window.teamsvideo = [res.data[0].videos];
+        },100);
+      },
+      error: function(err) {
+      }
+  });
+  $("#save").click(function(){
+    $.ajax({
+        type: "put",
+        //timeout: 2000,
+        async: false,
+        data:{
+          name:$("#teamname").val(),
+          introduction:UE.getEditor('newintroduction').getContent(),
+          about:UE.getEditor('myEditor').getContent(),
+          posterimg:window.photoimg.join(','),
+          logo:window.logoimg.join(','),
+          imgs:window.teamsimg.join(','),
+          videos:window.teamsvideo.join(',')
+        },
+        url: "http://139.196.237.72:3010/api/v1/teams/"+getid('id')+"",
+        success: function(res) {
+            window.location.href = "teams_list.html";
+        },
+        error: function(err) {
+        }
+    });
+  })
+}else{
+  $("#save").click(function(){
+    $.ajax({
+        type: "post",
+        //timeout: 2000,
+        async: false,
+        data:{
+          name:$("#teamname").val(),
+          introduction:UE.getEditor('newintroduction').getContent(),
+          about:UE.getEditor('myEditor').getContent(),
+          posterimg:window.photoimg.join(','),
+          logo:window.logoimg.join(','),
+          imgs:window.teamsimg.join(','),
+          videos:window.teamsvideo.join(',')
+        },
+        url: "http://139.196.237.72:3010/api/v1/teams",
+        success: function(res) {
+            window.location.href = "teams_list.html";
+        },
+        error: function(err) {
+            //alert(JSON.stringify(err));
+        }
+    });
+  })
+}
+
     </script>
   </body>
 </html>

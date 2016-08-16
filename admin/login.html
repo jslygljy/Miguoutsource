@@ -59,6 +59,7 @@
     <script type="text/javascript" src="assets/js/jquery.masonry.min.js"></script>
     <script type="text/javascript" src="assets/js/jquery.imagesloaded.min.js"></script>
     <script type="text/javascript" src="assets/js/jquery.facybox.js"></script>
+<<<<<<< HEAD
     <script type="text/javascript" src="assets/js/jquery.alertify.min.js"></script>
     <script type="text/javascript" src="assets/js/realm.js"></script>
     <script type="text/javascript">
@@ -100,6 +101,29 @@
              //alert(JSON.stringify(err));
          }
       })
+=======
+    <script type="text/javascript" src="assets/js/jquery.elfinder.min.html"></script>
+    <script type="text/javascript" src="assets/js/jquery.alertify.min.js"></script>
+    <script type="text/javascript" src="assets/js/realm.js"></script>
+    <script type="text/javascript">
+    $("#login").click(function(){
+      $.ajax({
+          type: "post",
+          //timeout: 2000,
+          async: false,
+          data:{
+            name:$("#inputuser").val(),
+            password:$("#inputPassword").val()
+          },
+          url: "http://139.196.237.72:3010/api/v1/teams",
+          success: function(res) {
+              console.log(res)
+          },
+          error: function(err) {
+              //alert(JSON.stringify(err));
+          }
+      });
+>>>>>>> 70d77fc3fae855ab4beb78672bad55f5ea4ba7c8
     })
     </script>
   </body>
