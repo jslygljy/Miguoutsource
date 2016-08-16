@@ -53,31 +53,28 @@
                         <th>团队logo</th>
                         <th>团队简介</th>
                         <th>团队作品照片</th>
-                        <th>团队作品照片</th>
                         <th>操作</th>
                       </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="teamslist">
                       <tr>
-                        <td>1</td>
-                        <td>fsdjlkfds</td>
-                        <td>fsdjlkfds</td>
-                        <td><img src="" alt=""></td>
-                        <td>fsdjlkfds</td>
+                        <td>{name}</td>
+                        <td><img src={logo} alt=""></td>
+                        <td>{introduction}</td>
+                        <td><img src={imgs} alt=""></td>
                         <td>
                           <div class="btn-group">
                             <a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#">
-                            Action
+                            操作
                               <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu pull-right">
-                              <li><a href="#"><i class="icon-edit"></i> Edit</a></li>
-                              <li><a href="#"><i class="icon-trash"></i> Delete</a></li>
+                              <li><a href="#"><i class="icon-edit"></i>修改</a></li>
+                              <li><a href="#"><i class="icon-trash"></i>删除</a></li>
                             </ul>
                           </div>
                         </td>
                       </tr>
-
                     </tbody>
                   </table>
                 </div> <!-- /widget-body -->
@@ -128,7 +125,6 @@
         url: "http://139.196.237.72:3010/api/v1/teams/count",
         success: function(res) {
             console.log(res);
-            navitcat
         },
         error: function(err) {
             //alert(JSON.stringify(err));
@@ -143,22 +139,20 @@
         },
         url: "http://139.196.237.72:3010/api/v1/teams",
         success: function(res) {
-            console.log(res)
-            // if (data.NewList.length != 0) {
-          	// 	var itemTemplate = $('#newlist').html();
-          	// 	var renderDatalist = data.NewList.slice((num-1) * 5, num * 5);
-            //       var html = renderDatalist.map(function(item,index) {
-            //         return itemTemplate
-            //         	.replace('{id}', item.id)
-            // 			.replace('{imagesid}', 'public/images/info_bg'+ item.ImagesID +'.png')
-            //   		.replace('{time}', item.NewTitle)
-            //   		.replace('{name}', item.Auther);
-            //     }).join('');
-            //
-            //      	$("#indexList ul").html(html);
-          	// }else{
-          	// 	$("#indexList ul").html('<li>数据为空</li>')
-          	// }
+
+            if (res.data.length != 0) {
+          		var itemTemplate = $('#teamslist').html();
+                  var html = res.data.map(function(item,index) {
+                    return itemTemplate
+                    	.replace('{name}', item.name)
+            			.replace('{logo}', item.logo.split(',')[0])
+              		.replace('{introduction}', item.introduction)
+              		.replace('{imgs}', item.imgs.split(',')[0]);
+                }).join('');
+
+              $("#teamslist").html(html);
+          	}else{
+          	}
         },
         error: function(err) {
             //alert(JSON.stringify(err));
