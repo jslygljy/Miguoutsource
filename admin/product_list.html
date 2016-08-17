@@ -51,26 +51,23 @@
                       <tr>
                         <th>产品名称</th>
                         <th>所属团队</th>
-                        <th>产品图片</th>
-                        <th>产品视频</th>
                         <th>操作</th>
                       </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="productlist">
                       <tr>
-                        <td>1</td>
-                        <td>fsdjlkfds</td>
-                        <td><img src="" alt=""></td>
-                        <td>fsdjlkfds</td>
+                        <td>{name}</td>
+                        <td>{team}</td>
+                        <td><img {imgs} alt=""></td>
                         <td>
                           <div class="btn-group">
                             <a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#">
-                            Action
+                            操作
                               <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu pull-right">
-                              <li><a href="#"><i class="icon-edit"></i> Edit</a></li>
-                              <li><a href="#"><i class="icon-trash"></i> Delete</a></li>
+                              <li><a href="product_add.html?id={editid}"><i class="icon-edit"></i>修改</a></li>
+                              <li id="dellist" name={delid}><a href="#"><i class="icon-trash"></i>删除</a></li>
                             </ul>
                           </div>
                         </td>
@@ -120,92 +117,65 @@
         $("#accordion2 .accordion-group .accordion-heading").eq(3).find('a').attr("class","accordion-toggle b_9FDDF6 active")
         $("#collapse4").addClass('in')
     });
-    // 文件上传
-jQuery(function() {
-var $ = jQuery,
-    $list = $('#thelist'),
-    $btn = $('#ctlBtn'),
-    state = 'pending',
-    uploader;
+    $.ajax({
+        type: "get",
+        //timeout: 2000,
+        async: false,
+        url: "http://139.196.237.72:3010/api/v1/products/count",
+        success: function(res) {
+            console.log(res);
+        },
+        error: function(err) {
+            //alert(JSON.stringify(err));
+        }
+    });
+    $.ajax({
+        type: "get",
+        //timeout: 2000,
+        async: false,
+        data:{
+          limit:0
+        },
+        url: "http://139.196.237.72:3010/api/v1/products",
+        success: function(res) {
+            if (res.data.length != 0) {
+          		var itemTemplate = $('#productlist').html();
+                  var html = res.data.map(function(item,index) {
+                    return itemTemplate
+                    	.replace('{name}', item.name)
+                      .replace('{editid}', item.id)
+                      .replace('{delid}', item.id)
+              		.replace('{team}', item.teamname)
+                  .replace('{imgs}', 'src="'+item.imgs.split(',')[0]+'"');
+                }).join('');
 
-uploader = WebUploader.create({
+              $("#productlist").html(html);
+          	}else{
+              $("#productlist").html('');
+          	}
+        },
+        error: function(err) {
+            //alert(JSON.stringify(err));
+        }
+    });
 
-    // 不压缩image
-    resize: false,
 
-    // swf文件路径
-    swf: '/swf/Uploader.swf',
-
-    // 文件接收服务端。
-    server: 'http://172.16.6.30:3010/api/v1/resources',
-
-    // 选择文件的按钮。可选。
-    // 内部根据当前运行是创建，可能是input元素，也可能是flash.
-    pick: '#picker'
-});
-
-// 当有文件添加进来的时候
-uploader.on( 'fileQueued', function( file ) {
-    $list.append( '<div id="' + file.id + '" class="item">' +
-        '<h4 class="info">' + file.name + '</h4>' +
-        '<p class="state">等待上传...</p>' +
-    '</div>' );
-});
-
-// 文件上传过程中创建进度条实时显示。
-uploader.on( 'uploadProgress', function( file, percentage ) {
-    var $li = $( '#'+file.id ),
-        $percent = $li.find('.progress .progress-bar');
-
-    // 避免重复创建
-    if ( !$percent.length ) {
-        $percent = $('<div class="progress progress-striped active">' +
-          '<div class="progress-bar" role="progressbar" style="width: 0%">' +
-          '</div>' +
-        '</div>').appendTo( $li ).find('.progress-bar');
-    }
-
-    $li.find('p.state').text('上传中');
-
-    $percent.css( 'width', percentage * 100 + '%' );
-});
-
-uploader.on( 'uploadSuccess', function( file ) {
-    $( '#'+file.id ).find('p.state').text('已上传');
-});
-
-uploader.on( 'uploadError', function( file ) {
-    $( '#'+file.id ).find('p.state').text('上传出错');
-});
-
-uploader.on( 'uploadComplete', function( file ) {
-    $( '#'+file.id ).find('.progress').fadeOut();
-});
-
-uploader.on( 'all', function( type ) {
-    if ( type === 'startUpload' ) {
-        state = 'uploading';
-    } else if ( type === 'stopUpload' ) {
-        state = 'paused';
-    } else if ( type === 'uploadFinished' ) {
-        state = 'done';
-    }
-
-    if ( state === 'uploading' ) {
-        $btn.text('暂停上传');
-    } else {
-        $btn.text('开始上传');
-    }
-});
-
-$btn.on( 'click', function() {
-    if ( state === 'uploading' ) {
-        uploader.stop();
-    } else {
-        uploader.upload();
-    }
-});
-});
+    $("#dellist").click(function(){
+      $.ajax({
+          type: "delete",
+          //timeout: 2000,
+          async: false,
+          url: 'http://139.196.237.72:3010/api/v1/teams/'+$(this).attr('name')+'',
+          success: function(res) {
+            if (res.code == 200) {
+                window.location.reload()
+            }
+          },
+          error: function(err) {
+              //alert(JSON.stringify(err));
+          }
+      });
+    })
     </script>
   </body>
 </html>

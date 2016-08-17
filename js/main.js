@@ -1,4 +1,7 @@
 $(document).ready(function() {
+    window.reqhref = 'http://139.196.237.72:3010'
+    
+
     $('#fullpage').fullpage({
         autoScrolling: false,
         menu: '#menu',
@@ -90,11 +93,11 @@ $(document).ready(function() {
         paginationClickable: true
     })
 
-    var mySwiper5 = new Swiper('#productimglist',{
-      scrollContainer: true,
-      scrollbar: {
-        container: '.swiper-scrollbar'
-      }
+    var mySwiper5 = new Swiper('#productimglist', {
+        scrollContainer: true,
+        scrollbar: {
+            container: '.swiper-scrollbar'
+        }
     })
 
 });

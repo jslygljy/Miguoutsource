@@ -489,3 +489,8 @@ figure.effect-selena:hover p {
 .swiper-active-switch {
     background: #fff;
 }
+
+@media screen and (min-width: 360px) and (max-width: 414px) {
+  #menu{display: none;}
+  .fp-tableCell img{width: 80%;}
+}

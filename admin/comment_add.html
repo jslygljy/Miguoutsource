@@ -52,30 +52,30 @@
                   <div class="control-group">
                     <label class="control-label">评论标题：</label>
                     <div class="controls">
-                      <input class="span7" type="text" placeholder="">
+                      <input id="commentinput" class="span7" type="text" placeholder="">
                     </div>
                   </div>
                   <div class="control-group">
                     <label class="control-label">选择头像:</label>
                     <div class="controls">
-                      <select tabindex="1" data-placeholder="Select here.." class="span7">
-                         <option value=""></option>
-                         <option value="Category 1">头像1</option>
-                         <option value="Category 2">头像2</option>
-                         <option value="Category 3">头像3</option>
-                         <option value="Category 4">头像4</option>
+                      <select tabindex="1" id="headselect" data-placeholder="Select here.." class="span7">
                       </select>
                    </div>
                   </div>
                   <div class="control-group">
                     <label class="control-label">选择类型:</label>
                     <div class="controls">
+                      <select tabindex="1" id="slecttype" data-placeholder="Select here.." class="span7">
+                         <option value="1">产品</option>
+                         <option value="2">团队</option>
+                         <option value="3">内容与体验</option>
+                      </select>
+                   </div>
+                  </div>
+                  <div class="control-group" id="selectlist">
+                    <label class="control-label">选择列表:</label>
+                    <div class="controls">
                       <select tabindex="1" data-placeholder="Select here.." class="span7">
-                         <option value=""></option>
-                         <option value="Category 1">头像1</option>
-                         <option value="Category 2">头像2</option>
-                         <option value="Category 3">头像3</option>
-                         <option value="Category 4">头像4</option>
                       </select>
                    </div>
                   </div>
@@ -108,7 +108,7 @@
               </div>
             </div>
             <div class="widget-footer">
-               <button class="btn btn-primary" type="submit">保存</button>
+               <button class="btn btn-primary" id="save" type="submit">保存</button>
                <button class="btn" type="button">返回</button>
             </div>
           </div>
@@ -150,92 +150,151 @@
         $("#accordion2 .accordion-group .accordion-heading").eq(5).find('a').attr("class","accordion-toggle b_9FDDF6 active")
         $("#collapse6").addClass('in')
     });
-    // 文件上传
-jQuery(function() {
-var $ = jQuery,
-    $list = $('#thelist'),
-    $btn = $('#ctlBtn'),
-    state = 'pending',
-    uploader;
+    $.ajax({
+        type: "get",
+        //timeout: 2000,
+        async: false,
+        data:{
+          limit:0
+        },
+        url: "http://139.196.237.72:3010/api/v1/heads",
+        success: function(res) {
+            var html='';
+            for (var i = 0; i < res.data.length; i++) {
+              html +='<option value='+ res.data[i].id +'>'+ res.data[i].nickname +'</option>'
+            }
+            $("#headselect").html(html)
+        },
+        error: function(err) {
+            //alert(JSON.stringify(err));
+        }
+    });
 
-uploader = WebUploader.create({
+    $.ajax({
+        type: "get",
+        //timeout: 2000,
+        async: false,
+        data:{
+          limit:0
+        },
+        url: "http://139.196.237.72:3010/api/v1/products",
+        success: function(res) {
+            var html='';
+            for (var i = 0; i < res.data.length; i++) {
+              html +='<option value='+ res.data[i].id +'>'+ res.data[i].name +'</option>'
+            }
+            $("#selectlist select").html(html)
+        },
+        error: function(err) {
+            //alert(JSON.stringify(err));
+        }
+    });
+    $("#slecttype").change(function(){
+      $("#selectlist").show();
+      if ($(this).val()==1) {
+        $.ajax({
+            type: "get",
+            //timeout: 2000,
+            async: false,
+            data:{
+              limit:0
+            },
+            url: "http://139.196.237.72:3010/api/v1/products",
+            success: function(res) {
+                var html='';
+                for (var i = 0; i < res.data.length; i++) {
+                  html +='<option value='+ res.data[i].id +'>'+ res.data[i].name +'</option>'
+                }
+                $("#selectlist select").html(html)
+            },
+            error: function(err) {
+                //alert(JSON.stringify(err));
+            }
+        });
+      }
+      if ($(this).val()==2) {
+        $("#selectlist").show();
+        $.ajax({
+            type: "get",
+            //timeout: 2000,
+            async: false,
+            data:{
+              limit:0
+            },
+            url: "http://139.196.237.72:3010/api/v1/teams",
+            success: function(res) {
+                var html='';
+                for (var i = 0; i < res.data.length; i++) {
+                  html +='<option value='+ res.data[i].id +'>'+ res.data[i].name +'</option>'
+                }
+                $("#selectlist select").html(html)
+            },
+            error: function(err) {
+                //alert(JSON.stringify(err));
+            }
+        });
+      }
+      if ($(this).val()==3) {
+            $("#selectlist").hide();
+      }
+    })
 
-    // 不压缩image
-    resize: false,
-
-    // swf文件路径
-    swf: '/swf/Uploader.swf',
-
-    // 文件接收服务端。
-    server: 'http://172.16.6.30:3010/api/v1/resources',
-
-    // 选择文件的按钮。可选。
-    // 内部根据当前运行是创建，可能是input元素，也可能是flash.
-    pick: '#picker'
-});
-
-// 当有文件添加进来的时候
-uploader.on( 'fileQueued', function( file ) {
-    $list.append( '<div id="' + file.id + '" class="item">' +
-        '<h4 class="info">' + file.name + '</h4>' +
-        '<p class="state">等待上传...</p>' +
-    '</div>' );
-});
-
-// 文件上传过程中创建进度条实时显示。
-uploader.on( 'uploadProgress', function( file, percentage ) {
-    var $li = $( '#'+file.id ),
-        $percent = $li.find('.progress .progress-bar');
-
-    // 避免重复创建
-    if ( !$percent.length ) {
-        $percent = $('<div class="progress progress-striped active">' +
-          '<div class="progress-bar" role="progressbar" style="width: 0%">' +
-          '</div>' +
-        '</div>').appendTo( $li ).find('.progress-bar');
+    if (getid('id')) {
+      $.ajax({
+          type: "get",
+          url: "http://139.196.237.72:3010/api/v1/evaluates/"+getid('id')+"",
+          success: function(res) {
+            setTimeout(function(){
+                $("#commentinput").val(res.data[0].title);
+                UE.getEditor('newintroduction').setContent(res.data[0].content);
+            },300);
+          },
+          error: function(err) {
+          }
+      });
+      $("#save").click(function(){
+        $.ajax({
+            type: "put",
+            //timeout: 2000,
+            async: false,
+            data:{
+              title:$("#commentinput").val(),
+              content:UE.getEditor('newintroduction').getContent(),
+              headid:$("#headselect").val(),
+              type:$("#slecttype").val(),
+              relationid:$("#selectlist select").val(),
+            },
+            url: "http://139.196.237.72:3010/api/v1/evaluates/"+getid('id')+"",
+            success: function(res) {
+                //console.log(res)
+                window.location.href = "comment_list.html";
+            },
+            error: function(err) {
+            }
+        });
+      })
+    }else{
+      $("#save").click(function(){
+        $.ajax({
+            type: "post",
+            //timeout: 2000,
+            async: false,
+            data:{
+              title:$("#commentinput").val(),
+              content:UE.getEditor('newintroduction').getContent(),
+              headid:$("#headselect").val(),
+              type:$("#slecttype").val(),
+              relationid:$("#selectlist select").val(),
+            },
+            url: "http://139.196.237.72:3010/api/v1/evaluates",
+            success: function(res) {
+                window.location.href = "comment_list.html";
+            },
+            error: function(err) {
+            }
+        });
+      })
     }
-
-    $li.find('p.state').text('上传中');
-
-    $percent.css( 'width', percentage * 100 + '%' );
-});
-
-uploader.on( 'uploadSuccess', function( file ) {
-    $( '#'+file.id ).find('p.state').text('已上传');
-});
-
-uploader.on( 'uploadError', function( file ) {
-    $( '#'+file.id ).find('p.state').text('上传出错');
-});
-
-uploader.on( 'uploadComplete', function( file ) {
-    $( '#'+file.id ).find('.progress').fadeOut();
-});
-
-uploader.on( 'all', function( type ) {
-    if ( type === 'startUpload' ) {
-        state = 'uploading';
-    } else if ( type === 'stopUpload' ) {
-        state = 'paused';
-    } else if ( type === 'uploadFinished' ) {
-        state = 'done';
-    }
-
-    if ( state === 'uploading' ) {
-        $btn.text('暂停上传');
-    } else {
-        $btn.text('开始上传');
-    }
-});
-
-$btn.on( 'click', function() {
-    if ( state === 'uploading' ) {
-        uploader.stop();
-    } else {
-        uploader.upload();
-    }
-});
-});
     </script>
   </body>
 </html>

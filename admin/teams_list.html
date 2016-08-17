@@ -59,9 +59,9 @@
                     <tbody id="teamslist">
                       <tr>
                         <td>{name}</td>
-                        <td><img src={logo} alt=""></td>
+                        <td><img {logo} alt=""></td>
                         <td>{introduction}</td>
-                        <td><img src={imgs} alt=""></td>
+                        <td><img {imgs} alt=""></td>
                         <td>
                           <div class="btn-group">
                             <a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#">
@@ -147,9 +147,9 @@
                     	.replace('{name}', item.name)
                       .replace('{editid}', item.id)
                       .replace('{delid}', item.id)
-            			.replace('{logo}', item.logo.split(',')[0])
+                  .replace('{logo}', 'src="'+item.logo.split(',')[0]+'"')
               		.replace('{introduction}', item.introduction)
-              		.replace('{imgs}', item.imgs.split(',')[0]);
+                  .replace('{imgs}', 'src="'+item.imgs.split(',')[0]+'"');
                 }).join('');
 
               $("#teamslist").html(html);

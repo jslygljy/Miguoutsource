@@ -52,6 +52,40 @@
                   <div class="control-group">
                     <label class="control-label">新闻名称:</label>
                     <div class="controls">
+                      <input class="span7" id="newsname" type="text" placeholder="">
+                    </div>
+                  </div>
+                  <div class="control-group">
+                    <label class="control-label">是否为团队新闻</label>
+                    <div class="controls">
+                      <label class="checkbox">
+                        <input type="checkbox" id="blooenteam" value="">
+                        是
+                      </label>
+                    </div>
+                  </div>
+                  <div class="control-group" id="isteam" style="display:none;">
+                    <label class="control-label">团队新闻类型：</label>
+                      <div class="controls">
+                        <select id="selectteam" data-placeholder="Select here.." class="span7">
+                              <option value="1">团队咨询</option>
+                              <option value="2">造梦师专访</option>
+                        </select>
+                     </div>
+                  </div>
+                  <div class="control-group"  id="notteam">
+                    <label class="control-label">非团队新闻类型：</label>
+                      <div class="controls">
+                        <select id="selectnotteam" data-placeholder="Select here.." class="span7">
+                              <option value="1">内部新闻</option>
+                              <option value="2">媒体外链</option>
+                              <option value="3">内容与体验</option>
+                        </select>
+                     </div>
+                  </div>
+                  <div class="control-group" id="newshref" style="display:none">
+                    <label class="control-label">外链地址:</label>
+                    <div class="controls">
                       <input class="span7" type="text" placeholder="">
                     </div>
                   </div>
@@ -105,35 +139,24 @@
                       </script>
                     </div>
                   </div>
-                  <div class="control-group">
-                    <label class="control-label">新闻类型：</label>
-                      <div class="controls">
-                        <select id="select2-basic" tabindex="1" data-placeholder="Select here.." class="span7">
-                              <option value="Category 1">1</option>
-                              <option value="Category 2">2</option>
-                        </select>
-                     </div>
-                  </div>
+
                   <div class="control-group">
                     <label class="control-label">是否为重大新闻</label>
                     <div class="controls">
                       <label class="checkbox">
-                        <input type="checkbox" value="">
+                        <input type="checkbox"  id="ismain" value="">
                         是
                       </label>
                     </div>
                   </div>
 
-                  <div class="control-group">
-                    <label class="control-label">上传头像：</label>
+                  <div class="control-group" id="uploadimg">
+                    <label class="control-label">上传banner：</label>
                     <div class="controls">
-                      <div id="uploader" class="wu-example">
-                        <!--用来存放文件信息-->
-                        <div id="thelist" class="uploader-list"></div>
-                        <div class="btns">
-                            <div id="picker" >选择文件</div>
-                            <button id="ctlBtn" class="btn btn-default">开始上传</button>
-                        </div>
+                      <div id="uploader-banner">
+                          <!--用来存放item-->
+                          <div id="imgfileList" class="uploader-list"></div>
+                          <div id="imgfilePicker">选择图片</div>
                       </div>
                     </div>
                   </div>
@@ -141,7 +164,7 @@
               </div>
             </div>
             <div class="widget-footer">
-               <button class="btn btn-primary" type="submit">保存</button>
+               <button class="btn btn-primary" id="save" type="submit">保存</button>
                <button class="btn" type="button">返回</button>
             </div>
           </div>
@@ -177,6 +200,31 @@
     <script type="text/javascript" src="assets/js/bootstrap-timepicker.js"></script>
 
     <script type="text/javascript">
+    $("#blooenteam").change(function(){
+        if ($(this).attr("checked") == 'checked') {
+            $("#isteam").show();
+            $("#notteam").hide();
+        }else{
+          $("#isteam").hide();
+          $("#notteam").show();
+        }
+    })
+
+    $("#ismain").change(function(){
+        if ($(this).attr("checked") == 'checked') {
+            $("#uploadimg").show();
+        }else{
+          $("#uploadimg").hide();
+        }
+    })
+
+    $("#selectnotteam").change(function(){
+        if ($(this).val() == 2) {
+            $("#newshref").show();
+        }else{
+          $("#newshref").hide();
+        }
+    })
     $(document).ready(function() {
 
         $("#accordion2 .accordion-group .accordion-heading a").removeClass("active");
@@ -190,99 +238,203 @@
             contentType: "text/json",
             url: "http://139.196.237.72:3010/api/v1/teams",
             success: function(res) {
-                
+
             },
             error: function(err) {
                 //alert(JSON.stringify(err));
             }
         });
     });
-    // 文件上传
-jQuery(function() {
-var $ = jQuery,
-    $list = $('#thelist'),
-    $btn = $('#ctlBtn'),
-    state = 'pending',
-    uploader;
 
-uploader = WebUploader.create({
+    //新闻banner
+    var uploaderimg = WebUploader.create({
 
-    // 不压缩image
-    resize: false,
+        // 选完文件后，是否自动上传。
+        auto: true,
 
-    // swf文件路径
-    swf: '/swf/Uploader.swf',
+        // swf文件路径
+        swf:'/swf/Uploader.swf',
 
-    // 文件接收服务端。
-    server: 'http://172.16.6.30:3010/api/v1/resources',
+        // 文件接收服务端。
+        server: 'http://139.196.237.72:3010/api/v1/resources',
 
-    // 选择文件的按钮。可选。
-    // 内部根据当前运行是创建，可能是input元素，也可能是flash.
-    pick: '#picker'
-});
+        // 选择文件的按钮。可选。
+        // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+        pick: '#imgfilePicker',
 
-// 当有文件添加进来的时候
-uploader.on( 'fileQueued', function( file ) {
-    $list.append( '<div id="' + file.id + '" class="item">' +
-        '<h4 class="info">' + file.name + '</h4>' +
-        '<p class="state">等待上传...</p>' +
-    '</div>' );
-});
+        // 只允许选择图片文件。
+        accept: {
+            title: 'Images',
+            extensions: 'gif,jpg,jpeg,bmp,png',
+            mimeTypes: 'image/*'
+        }
+    });
+    // 当有文件添加进来的时候
+    uploaderimg.on( 'fileQueued', function( file ) {
+        var $li = $(
+                '<div id="' + file.id + '" class="file-item thumbnail">' +
+                    '<img>' +
+                    '<div class="info">' + file.name + '</div>' +
+                '</div>'
+                ),
+            $img = $li.find('img');
 
-// 文件上传过程中创建进度条实时显示。
-uploader.on( 'uploadProgress', function( file, percentage ) {
-    var $li = $( '#'+file.id ),
-        $percent = $li.find('.progress .progress-bar');
 
-    // 避免重复创建
-    if ( !$percent.length ) {
-        $percent = $('<div class="progress progress-striped active">' +
-          '<div class="progress-bar" role="progressbar" style="width: 0%">' +
-          '</div>' +
-        '</div>').appendTo( $li ).find('.progress-bar');
+        // $list为容器jQuery实例
+        $("#imgfileList").append( $li );
+
+        // 创建缩略图
+        // 如果为非图片文件，可以不用调用此方法。
+        // thumbnailWidth x thumbnailHeight 为 100 x 100
+        uploaderimg.makeThumb( file, function( error, src ) {
+            if ( error ) {
+                $img.replaceWith('<span>不能预览</span>');
+                return;
+            }
+
+            $img.attr( 'src', src );
+        }, 100,100);
+    });
+    // 文件上传过程中创建进度条实时显示。
+    uploaderimg.on( 'uploadProgress', function( file, percentage ) {
+        var $li = $( '#'+file.id ),
+            $percent = $li.find('.progress span');
+
+        // 避免重复创建
+        if ( !$percent.length ) {
+            $percent = $('<p class="progress"><span></span></p>')
+                    .appendTo( $li )
+                    .find('span');
+        }
+
+        $percent.css( 'width', percentage * 100 + '%' );
+    });
+
+    // 文件上传成功，给item添加成功class, 用样式标记上传成功。
+    uploaderimg.on( 'uploadSuccess', function( file,data) {
+      window.bannerimg = window.teamsimg || [];
+      window.bannerimg.push(data.data[0].viewPath);
+        // if (window.teamsimg) {
+        //   window.teamsimg.push(data.data[0].viewPath);
+        //   window.teamsimg.join(',')
+        // }else{
+        //   window.teamsimg = [data.data[0].viewPath]
+        // }
+        $( '#'+file.id ).addClass('upload-state-done');
+    });
+
+    // 文件上传失败，显示上传出错。
+    uploaderimg.on( 'uploadError', function( file ) {
+        var $li = $( '#'+file.id ),
+            $error = $li.find('div.error');
+
+        // 避免重复创建
+        if ( !$error.length ) {
+            $error = $('<div class="error"></div>').appendTo( $li );
+        }
+
+        $error.text('上传失败');
+    });
+
+    // 完成上传完了，成功或者失败，先删除进度条。
+    uploaderimg.on( 'uploadComplete', function( file ) {
+        $( '#'+file.id ).find('.progress').remove();
+    });
+
+if (getid('id')) {
+  $.ajax({
+      type: "get",
+      url: "http://139.196.237.72:3010/api/v1/news/"+getid('id')+"",
+      success: function(res) {
+        setTimeout(function(){
+            $("#newsname").val(res.data[0].name);
+            UE.getEditor('newintroduction').setContent(res.data[0].introduction);
+            UE.getEditor('myEditor').setContent(res.data[0].detail);
+            $("#uploader-banner").html('<img src='+ res.data[0].banner +'>');
+            window.bannerimg = [res.data[0].banner];
+        },300);
+      },
+      error: function(err) {
+      }
+  });
+  $("#save").click(function(){
+    var teamblooen,mainblooen,type;
+    if ($("#blooenteam").attr("checked") == 'checked') {
+      teamblooen = 1;
+      type = $("#selectteam").val();
+    }else{
+      teamblooen = 0;
+      type = $("#selectnotteam").val();
     }
-
-    $li.find('p.state').text('上传中');
-
-    $percent.css( 'width', percentage * 100 + '%' );
-});
-
-uploader.on( 'uploadSuccess', function( file ) {
-    $( '#'+file.id ).find('p.state').text('已上传');
-});
-
-uploader.on( 'uploadError', function( file ) {
-    $( '#'+file.id ).find('p.state').text('上传出错');
-});
-
-uploader.on( 'uploadComplete', function( file ) {
-    $( '#'+file.id ).find('.progress').fadeOut();
-});
-
-uploader.on( 'all', function( type ) {
-    if ( type === 'startUpload' ) {
-        state = 'uploading';
-    } else if ( type === 'stopUpload' ) {
-        state = 'paused';
-    } else if ( type === 'uploadFinished' ) {
-        state = 'done';
+    if ($("#ismain").attr("checked") == 'checked') {
+      mainblooen = 1;
+    }else{
+      mainblooen = 0;
+      window.bannerimg = []
     }
-
-    if ( state === 'uploading' ) {
-        $btn.text('暂停上传');
-    } else {
-        $btn.text('开始上传');
+    $.ajax({
+        type: "put",
+        //timeout: 2000,
+        async: false,
+        data:{
+          name:$("#newsname").val(),
+          introduction:UE.getEditor('newintroduction').getContent(),
+          detail:UE.getEditor('myEditor').getContent(),
+          isteam:teamblooen,
+          ismajor:mainblooen,
+          type:type,
+          linkurl:$("#newshref input").val(),
+          banner:window.bannerimg.join(',')
+        },
+        url: "http://139.196.237.72:3010/api/v1/news/"+getid('id')+"",
+        success: function(res) {
+            console.log(res)
+            //window.location.href = "news_list.html";
+        },
+        error: function(err) {
+        }
+    });
+  })
+}else{
+  $("#save").click(function(){
+    var teamblooen,mainblooen,type;
+    if ($("#blooenteam").attr("checked") == 'checked') {
+      teamblooen = 1;
+      type = $("#selectteam").val();
+    }else{
+      teamblooen = 0;
+      type = $("#selectnotteam").val();
     }
-});
-
-$btn.on( 'click', function() {
-    if ( state === 'uploading' ) {
-        uploader.stop();
-    } else {
-        uploader.upload();
+    if ($("#ismain").attr("checked") == 'checked') {
+      mainblooen = 1;
+    }else{
+      mainblooen = 0;
+      window.bannerimg = []
     }
-});
-});
+    $.ajax({
+        type: "post",
+        //timeout: 2000,
+        async: false,
+        data:{
+          name:$("#newsname").val(),
+          introduction:UE.getEditor('newintroduction').getContent(),
+          detail:UE.getEditor('myEditor').getContent(),
+          isteam:teamblooen,
+          ismajor:mainblooen,
+          type:type,
+          heat:1,
+          linkurl:$("#newshref input").val(),
+          banner:window.bannerimg.join(',')
+        },
+        url: "http://139.196.237.72:3010/api/v1/news",
+        success: function(res) {
+            window.location.href = "news_list.html";
+        },
+        error: function(err) {
+        }
+    });
+  })
+}
     </script>
   </body>
 </html>

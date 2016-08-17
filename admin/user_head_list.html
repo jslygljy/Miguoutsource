@@ -59,7 +59,7 @@
                       <tr id={ids}>
                         <td>{id}</td>
                         <td>{user}</td>
-                        <td><img src={imgs} alt=""></td>
+                        <td><img {imgs} alt=""></td>
                         <td>
                           <div class="btn-group">
                             <a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#">
@@ -139,7 +139,6 @@
         },
         url: "http://139.196.237.72:3010/api/v1/heads",
         success: function(res) {
-            console.log(res)
             if (res.data.length != 0) {
           		var itemTemplate = $('#headslist').html();
                   var html = res.data.map(function(item,index) {
@@ -148,9 +147,9 @@
                       .replace('{editid}', item.id)
                       .replace('{delid}', item.id)
               		.replace('{user}', item.nickname)
-              		.replace('{imgs}', item.url.split(',')[0]);
+              		.replace('{imgs}', 'src="'+item.url.split(',')[0]+'"');
                 }).join('');
-
+              console.log(html)
               $("#headslist").html(html);
           	}else{
               $("#headslist").html('');

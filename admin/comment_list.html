@@ -34,6 +34,16 @@
           <h2 class="heading">
                 评论列表
           </h2>
+          <div class="control-group">
+            <label class="control-label">评论类型选择:</label>
+            <div class="controls">
+              <select id="commenttype" tabindex="1" data-placeholder="Select here.." class="span7">
+                 <option value="1">产品评论</option>
+                 <option value="2">团队评论</option>
+                 <option value="3">内容与体验</option>
+              </select>
+           </div>
+          </div>
         </div>
         <div class="row-fluid">
               <div class="widget widget-padding span12">
@@ -51,29 +61,12 @@
                         <th>评论编号</th>
                         <th>评论标题</th>
                         <th>评论头像</th>
-                        <th>评论类型</th>
+                        <th>名称</th>
                         <th>操作</th>
                       </tr>
                     </thead>
-                    <tbody>
-                      <tr>
-                        <td>1</td>
-                        <td>fsdjlkfds</td>
-                        <td><img src="" alt=""></td>
-                        <td>附件二</td>
-                        <td>
-                          <div class="btn-group">
-                            <a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#">
-                            Action
-                              <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu pull-right">
-                              <li><a href="#"><i class="icon-edit"></i> Edit</a></li>
-                              <li><a href="#"><i class="icon-trash"></i> Delete</a></li>
-                            </ul>
-                          </div>
-                        </td>
-                      </tr>
+                    <tbody id="comment_list">
+
 
                     </tbody>
                   </table>
@@ -87,7 +80,26 @@
 
     </div><!--/.fluid-container-->
     </div><!-- wrap ends-->
-
+    <script type="text/temple" id="templelist">
+        <tr>
+          <td>{id}</td>
+          <td>{title}</td>
+          <td><img {imgs} alt=""></td>
+          <td>{type}</td>
+          <td>
+            <div class="btn-group">
+              <a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#">
+              操作
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu pull-right">
+                <li><a href="comment_add.html?id={editid}"><i class="icon-edit"></i>修改</a></li>
+                <li id="dellist" name={delid}><a href="#"><i class="icon-trash"></i>删除</a></li>
+              </ul>
+            </div>
+          </td>
+        </tr>
+    </script>
     <script type="text/javascript" src="assets/js/jquery.min.js"></script>
     <script src="assets/js/main.js"></script>
     <script type="text/javascript" src="assets/js/jquery-ui.min.js"></script>
@@ -119,92 +131,134 @@
         $("#accordion2 .accordion-group .accordion-heading").eq(5).find('a').attr("class","accordion-toggle b_9FDDF6 active")
         $("#collapse6").addClass('in')
     });
-    // 文件上传
-jQuery(function() {
-var $ = jQuery,
-    $list = $('#thelist'),
-    $btn = $('#ctlBtn'),
-    state = 'pending',
-    uploader;
+    $.ajax({
+        type: "get",
+        //timeout: 2000,
+        async: false,
+        data:{
+          limit:0
+        },
+        url: "http://139.196.237.72:3010/api/v1/evaluates/type/1",
+        success: function(res) {
+          if (res.data.length != 0) {
+            var itemTemplate = $('#comment_list').html();
+                var html = res.data.map(function(item,index) {
+                  return itemTemplate
+                    .replace('{title}', item.title)
+                    .replace('{editid}', item.id)
+                    .replace('{delid}', item.id)
+                .replace('{id}', item.id)
+                .replace('{imgs}','src="'+item.url.split(',')[0]+'"')
+                .replace('{type}', item.name)
+              }).join('');
 
-uploader = WebUploader.create({
+            $("#comment_list").html(html);
+          }else{
+            $("#comment_list").html('');
+          }
+        },
+        error: function(err) {
+            //alert(JSON.stringify(err));
+        }
+    });
+    $("#commenttype").change(function(){
+      if ($(this).val()==1) {
+        $.ajax({
+            type: "get",
+            //timeout: 2000,
+            async: false,
+            data:{
+              limit:0
+            },
+            url: "http://139.196.237.72:3010/api/v1/evaluates/type/1",
+            success: function(res) {
+              if (res.data.length != 0) {
+                var itemTemplate = $('#templelist').html();
+                    var html = res.data.map(function(item,index) {
+                      return itemTemplate
+                      .replace('{title}', item.title)
+                      .replace('{editid}', item.id)
+                      .replace('{delid}', item.id)
+                  .replace('{id}', item.id)
+                  .replace('{imgs}','src="'+item.url.split(',')[0]+'"')
+                  .replace('{type}', item.name)
+                  }).join('');
 
-    // 不压缩image
-    resize: false,
+                $("#comment_list").html(html);
+              }else{
+                $("#comment_list").html('');
+              }
+            },
+            error: function(err) {
+                //alert(JSON.stringify(err));
+            }
+        });
+      }
+      if ($(this).val()==2) {
+        $.ajax({
+            type: "get",
+            //timeout: 2000,
+            async: false,
+            data:{
+              limit:0
+            },
+            url: "http://139.196.237.72:3010/api/v1/evaluates/type/2",
+            success: function(res) {
+              if (res.data.length != 0) {
+                var itemTemplate = $('#templelist').html();
+                    var html = res.data.map(function(item,index) {
+                      return itemTemplate
+                      .replace('{title}', item.title)
+                      .replace('{editid}', item.id)
+                      .replace('{delid}', item.id)
+                  .replace('{id}', item.id)
+                  .replace('{imgs}','src="'+item.url.split(',')[0]+'"')
+                  .replace('{type}', item.name)
+                  }).join('');
 
-    // swf文件路径
-    swf: '/swf/Uploader.swf',
+                $("#comment_list").html(html);
+              }else{
+                $("#comment_list").html('');
+              }
+            },
+            error: function(err) {
+                //alert(JSON.stringify(err));
+            }
+        });
+      }
+      if ($(this).val()==3) {
+        $.ajax({
+            type: "get",
+            //timeout: 2000,
+            async: false,
+            data:{
+              limit:0
+            },
+            url: "http://139.196.237.72:3010/api/v1/evaluates/type/3",
+            success: function(res) {
+              if (res.data.length != 0) {
+                var itemTemplate = $('#templelist').html();
+                    var html = res.data.map(function(item,index) {
+                      return itemTemplate
+                      .replace('{title}', item.title)
+                      .replace('{editid}', item.id)
+                      .replace('{delid}', item.id)
+                  .replace('{id}', item.id)
+                  .replace('{imgs}','src="'+item.url.split(',')[0]+'"')
+                  .replace('{type}', item.name)
+                  }).join('');
 
-    // 文件接收服务端。
-    server: 'http://172.16.6.30:3010/api/v1/resources',
-
-    // 选择文件的按钮。可选。
-    // 内部根据当前运行是创建，可能是input元素，也可能是flash.
-    pick: '#picker'
-});
-
-// 当有文件添加进来的时候
-uploader.on( 'fileQueued', function( file ) {
-    $list.append( '<div id="' + file.id + '" class="item">' +
-        '<h4 class="info">' + file.name + '</h4>' +
-        '<p class="state">等待上传...</p>' +
-    '</div>' );
-});
-
-// 文件上传过程中创建进度条实时显示。
-uploader.on( 'uploadProgress', function( file, percentage ) {
-    var $li = $( '#'+file.id ),
-        $percent = $li.find('.progress .progress-bar');
-
-    // 避免重复创建
-    if ( !$percent.length ) {
-        $percent = $('<div class="progress progress-striped active">' +
-          '<div class="progress-bar" role="progressbar" style="width: 0%">' +
-          '</div>' +
-        '</div>').appendTo( $li ).find('.progress-bar');
-    }
-
-    $li.find('p.state').text('上传中');
-
-    $percent.css( 'width', percentage * 100 + '%' );
-});
-
-uploader.on( 'uploadSuccess', function( file ) {
-    $( '#'+file.id ).find('p.state').text('已上传');
-});
-
-uploader.on( 'uploadError', function( file ) {
-    $( '#'+file.id ).find('p.state').text('上传出错');
-});
-
-uploader.on( 'uploadComplete', function( file ) {
-    $( '#'+file.id ).find('.progress').fadeOut();
-});
-
-uploader.on( 'all', function( type ) {
-    if ( type === 'startUpload' ) {
-        state = 'uploading';
-    } else if ( type === 'stopUpload' ) {
-        state = 'paused';
-    } else if ( type === 'uploadFinished' ) {
-        state = 'done';
-    }
-
-    if ( state === 'uploading' ) {
-        $btn.text('暂停上传');
-    } else {
-        $btn.text('开始上传');
-    }
-});
-
-$btn.on( 'click', function() {
-    if ( state === 'uploading' ) {
-        uploader.stop();
-    } else {
-        uploader.upload();
-    }
-});
-});
+                $("#comment_list").html(html);
+              }else{
+                $("#comment_list").html('');
+              }
+            },
+            error: function(err) {
+                //alert(JSON.stringify(err));
+            }
+        });
+      }
+    })
     </script>
   </body>
 </html>

@@ -7,6 +7,8 @@ function getid(name) {
         return undefined;
     }
 }
+
+
 $(document).ready(function() {
 
     /**
@@ -29,9 +31,10 @@ $(document).ready(function() {
             sessionStorage.removeItem(key);
         }
     };
+
     if (!window.Storage.getItem('user') && !window.Storage.getItem('pwd')) {
         window.location.href = "login.html";
-    };
+    }
     $.ajax({
         type: "post",
         //timeout: 2000,

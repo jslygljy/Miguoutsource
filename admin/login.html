@@ -72,6 +72,8 @@
             sessionStorage.removeItem(key);
         }
     };
+    window.Storage.removeItem('pwd')
+    window.Storage.removeItem('user')
     $("#login").click(function(){
       $.ajax({
          type:"POST",

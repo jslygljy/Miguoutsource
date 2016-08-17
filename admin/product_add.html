@@ -48,11 +48,10 @@
             </div>
             <div class="widget-body">
               <div class="widget-forms clearfix">
-                <form class="form-horizontal">
                   <div class="control-group">
                     <label class="control-label">产品名称:</label>
                     <div class="controls">
-                      <input class="span7" type="text" placeholder="">
+                      <input class="span7" id="productname" type="text" placeholder="">
                     </div>
                   </div>
                   <div class="control-group">
@@ -83,45 +82,35 @@
                   <div class="control-group">
                     <label class="control-label">产品海报图片：</label>
                     <div class="controls">
-                      <div id="uploader" class="wu-example">
-                        <!--用来存放文件信息-->
-                        <div id="thelist" class="uploader-list"></div>
-                        <div class="btns">
-                            <div id="picker" >选择文件</div>
-                            <button id="ctlBtn" class="btn btn-default">开始上传</button>
-                        </div>
+                      <div id="uploader-photo">
+                          <!--用来存放item-->
+                          <div id="fileList" class="uploader-list"></div>
+                          <div id="filePicker">选择图片</div>
                       </div>
                     </div>
                   </div>
                   <div class="control-group">
                     <label class="control-label">产品大背景图：</label>
                     <div class="controls">
-                      <div id="uploader2" class="wu-example">
-                        <!--用来存放文件信息-->
-                        <div id="thelist2" class="uploader-list"></div>
-                        <div class="btns">
-                            <div id="picker" >选择文件</div>
-                            <button id="ctlBtn" class="btn btn-default">开始上传</button>
-                        </div>
+                      <div id="uploader-big">
+                          <!--用来存放item-->
+                          <div id="bigfileList" class="uploader-list"></div>
+                          <div id="bigfilePicker">选择图片</div>
                       </div>
                     </div>
                   </div>
                   <div class="control-group">
                     <label class="control-label">所属团队：</label>
-                      <div class="controls">
-                        <select id="select2-basic" tabindex="1" data-placeholder="Select here.." class="span7">
-                              <option value="Category 1">1</option>
-                              <option value="Category 2">2</option>
-                        </select>
+                      <div class="controls" id="teamlist">
                      </div>
                   </div>
 
                   <div class="control-group">
                     <label class="control-label">产品视频：</label>
                     <div class="controls">
-                      <div id="uploader2" class="wu-example">
+                      <div id="uploader" class="wu-example">
                         <!--用来存放文件信息-->
-                        <div id="thelist2" class="uploader-list"></div>
+                        <div id="thelist" class="uploader-list"></div>
                         <div class="btns">
                             <div id="picker" >选择文件</div>
                             <button id="ctlBtn" class="btn btn-default">开始上传</button>
@@ -133,21 +122,17 @@
                   <div class="control-group">
                     <label class="control-label">产品图片：</label>
                     <div class="controls">
-                      <div id="uploader2" class="wu-example">
-                        <!--用来存放文件信息-->
-                        <div id="thelist2" class="uploader-list"></div>
-                        <div class="btns">
-                            <div id="picker" >选择文件</div>
-                            <button id="ctlBtn" class="btn btn-default">开始上传</button>
-                        </div>
+                      <div id="uploader-img">
+                          <!--用来存放item-->
+                          <div id="imgfileList" class="uploader-list"></div>
+                          <div id="imgfilePicker">选择图片</div>
                       </div>
                     </div>
                   </div>
-                </form>
               </div>
             </div>
             <div class="widget-footer">
-               <button class="btn btn-primary" type="submit">保存</button>
+               <button class="btn btn-primary" id="save" type="submit">保存</button>
                <button class="btn" type="button">返回</button>
             </div>
           </div>
@@ -189,40 +174,314 @@
         $("#accordion2 .accordion-group .accordion-heading").eq(3).find('a').attr("class","accordion-toggle b_9FDDF6 active")
         $("#collapse4").addClass('in')
     });
-    // 文件上传
+    //上传团队海报
+    var uploader = WebUploader.create({
+
+        // 选完文件后，是否自动上传。
+        auto: true,
+
+        // swf文件路径
+        swf:'/swf/Uploader.swf',
+
+        // 文件接收服务端。
+        server: 'http://139.196.237.72:3010/api/v1/resources',
+
+        // 选择文件的按钮。可选。
+        // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+        pick: '#filePicker',
+
+        // 只允许选择图片文件。
+        accept: {
+            title: 'Images',
+            extensions: 'gif,jpg,jpeg,bmp,png',
+            mimeTypes: 'image/*'
+        }
+    });
+    // 当有文件添加进来的时候
+    uploader.on( 'fileQueued', function( file ) {
+        var $li = $(
+                '<div id="' + file.id + '" class="file-item thumbnail">' +
+                    '<img>' +
+                    '<div class="info">' + file.name + '</div>' +
+                '</div>'
+                ),
+            $img = $li.find('img');
+
+
+        // $list为容器jQuery实例
+        $("#fileList").append( $li );
+
+        // 创建缩略图
+        // 如果为非图片文件，可以不用调用此方法。
+        // thumbnailWidth x thumbnailHeight 为 100 x 100
+        uploader.makeThumb( file, function( error, src ) {
+            if ( error ) {
+                $img.replaceWith('<span>不能预览</span>');
+                return;
+            }
+
+            $img.attr( 'src', src );
+        }, 100,100);
+    });
+    // 文件上传过程中创建进度条实时显示。
+    uploader.on( 'uploadProgress', function( file, percentage ) {
+        var $li = $( '#'+file.id ),
+            $percent = $li.find('.progress span');
+
+        // 避免重复创建
+        if ( !$percent.length ) {
+            $percent = $('<p class="progress"><span></span></p>')
+                    .appendTo( $li )
+                    .find('span');
+        }
+
+        $percent.css( 'width', percentage * 100 + '%' );
+    });
+
+    // 文件上传成功，给item添加成功class, 用样式标记上传成功。
+    uploader.on( 'uploadSuccess', function( file ,data) {
+      window.photoimg = window.photoimg || [];
+      window.photoimg.push(data.data[0].viewPath);
+        $( '#'+file.id ).addClass('upload-state-done');
+    });
+
+    // 文件上传失败，显示上传出错。
+    uploader.on( 'uploadError', function( file ) {
+        var $li = $( '#'+file.id ),
+            $error = $li.find('div.error');
+
+        // 避免重复创建
+        if ( !$error.length ) {
+            $error = $('<div class="error"></div>').appendTo( $li );
+        }
+
+        $error.text('上传失败');
+    });
+
+    // 完成上传完了，成功或者失败，先删除进度条。
+    uploader.on( 'uploadComplete', function( file ) {
+        $( '#'+file.id ).find('.progress').remove();
+    });
+
+    //上传产品大背景图
+    var uploaderlogo = WebUploader.create({
+
+        // 选完文件后，是否自动上传。
+        auto: true,
+
+        // swf文件路径
+        swf:'/swf/Uploader.swf',
+
+        // 文件接收服务端。
+        server: 'http://139.196.237.72:3010/api/v1/resources',
+
+        // 选择文件的按钮。可选。
+        // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+        pick: '#bigfilePicker',
+
+        // 只允许选择图片文件。
+        accept: {
+            title: 'Images',
+            extensions: 'gif,jpg,jpeg,bmp,png',
+            mimeTypes: 'image/*'
+        }
+    });
+    // 当有文件添加进来的时候
+    uploaderlogo.on( 'fileQueued', function( file ) {
+        var $li = $(
+                '<div id="' + file.id + '" class="file-item thumbnail">' +
+                    '<img>' +
+                    '<div class="info">' + file.name + '</div>' +
+                '</div>'
+                ),
+            $img = $li.find('img');
+
+
+        // $list为容器jQuery实例
+        $("#bigfileList").append( $li );
+
+        // 创建缩略图
+        // 如果为非图片文件，可以不用调用此方法。
+        // thumbnailWidth x thumbnailHeight 为 100 x 100
+        uploaderlogo.makeThumb( file, function( error, src ) {
+            if ( error ) {
+                $img.replaceWith('<span>不能预览</span>');
+                return;
+            }
+
+            $img.attr( 'src', src );
+        }, 100,100);
+    });
+    // 文件上传过程中创建进度条实时显示。
+    uploaderlogo.on( 'uploadProgress', function( file, percentage ) {
+        var $li = $( '#'+file.id ),
+            $percent = $li.find('.progress span');
+
+        // 避免重复创建
+        if ( !$percent.length ) {
+            $percent = $('<p class="progress"><span></span></p>')
+                    .appendTo( $li )
+                    .find('span');
+        }
+
+        $percent.css( 'width', percentage * 100 + '%' );
+    });
+
+    // 文件上传成功，给item添加成功class, 用样式标记上传成功。
+    uploaderlogo.on( 'uploadSuccess', function( file,data) {
+      window.bigimg = window.bigimg || [];
+      window.bigimg.push(data.data[0].viewPath);
+        $( '#'+file.id ).addClass('upload-state-done');
+    });
+
+    // 文件上传失败，显示上传出错。
+    uploaderlogo.on( 'uploadError', function( file ) {
+        var $li = $( '#'+file.id ),
+            $error = $li.find('div.error');
+
+        // 避免重复创建
+        if ( !$error.length ) {
+            $error = $('<div class="error"></div>').appendTo( $li );
+        }
+
+        $error.text('上传失败');
+    });
+
+    // 完成上传完了，成功或者失败，先删除进度条。
+    uploaderlogo.on( 'uploadComplete', function( file ) {
+        $( '#'+file.id ).find('.progress').remove();
+    });
+
+    //上传产品图片
+    var uploaderimg = WebUploader.create({
+
+        // 选完文件后，是否自动上传。
+        auto: true,
+
+        // swf文件路径
+        swf:'/swf/Uploader.swf',
+
+        // 文件接收服务端。
+        server: 'http://139.196.237.72:3010/api/v1/resources',
+
+        // 选择文件的按钮。可选。
+        // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+        pick: '#imgfilePicker',
+
+        // 只允许选择图片文件。
+        accept: {
+            title: 'Images',
+            extensions: 'gif,jpg,jpeg,bmp,png',
+            mimeTypes: 'image/*'
+        }
+    });
+    // 当有文件添加进来的时候
+    uploaderimg.on( 'fileQueued', function( file ) {
+        var $li = $(
+                '<div id="' + file.id + '" class="file-item thumbnail">' +
+                    '<img>' +
+                    '<div class="info">' + file.name + '</div>' +
+                '</div>'
+                ),
+            $img = $li.find('img');
+
+
+        // $list为容器jQuery实例
+        $("#imgfileList").append( $li );
+
+        // 创建缩略图
+        // 如果为非图片文件，可以不用调用此方法。
+        // thumbnailWidth x thumbnailHeight 为 100 x 100
+        uploaderimg.makeThumb( file, function( error, src ) {
+            if ( error ) {
+                $img.replaceWith('<span>不能预览</span>');
+                return;
+            }
+
+            $img.attr( 'src', src );
+        }, 100,100);
+    });
+    // 文件上传过程中创建进度条实时显示。
+    uploaderimg.on( 'uploadProgress', function( file, percentage ) {
+        var $li = $( '#'+file.id ),
+            $percent = $li.find('.progress span');
+
+        // 避免重复创建
+        if ( !$percent.length ) {
+            $percent = $('<p class="progress"><span></span></p>')
+                    .appendTo( $li )
+                    .find('span');
+        }
+
+        $percent.css( 'width', percentage * 100 + '%' );
+    });
+
+    // 文件上传成功，给item添加成功class, 用样式标记上传成功。
+    uploaderimg.on( 'uploadSuccess', function( file,data) {
+      window.teamsimg = window.teamsimg || [];
+      window.teamsimg.push(data.data[0].viewPath);
+        // if (window.teamsimg) {
+        //   window.teamsimg.push(data.data[0].viewPath);
+        //   window.teamsimg.join(',')
+        // }else{
+        //   window.teamsimg = [data.data[0].viewPath]
+        // }
+        $( '#'+file.id ).addClass('upload-state-done');
+    });
+
+    // 文件上传失败，显示上传出错。
+    uploaderimg.on( 'uploadError', function( file ) {
+        var $li = $( '#'+file.id ),
+            $error = $li.find('div.error');
+
+        // 避免重复创建
+        if ( !$error.length ) {
+            $error = $('<div class="error"></div>').appendTo( $li );
+        }
+
+        $error.text('上传失败');
+    });
+
+    // 完成上传完了，成功或者失败，先删除进度条。
+    uploaderimg.on( 'uploadComplete', function( file ) {
+        $( '#'+file.id ).find('.progress').remove();
+    });
+
+
+    // 上传产品视频
 jQuery(function() {
-var $ = jQuery,
+    var $ = jQuery,
     $list = $('#thelist'),
     $btn = $('#ctlBtn'),
     state = 'pending',
-    uploader;
+    uploadervideo;
 
-uploader = WebUploader.create({
+    uploadervideo = WebUploader.create({
 
-    // 不压缩image
-    resize: false,
+        // 不压缩image
+        resize: false,
 
-    // swf文件路径
-    swf: '/swf/Uploader.swf',
+        // swf文件路径
+        swf: '/swf/Uploader.swf',
 
-    // 文件接收服务端。
-    server: 'http://172.16.6.30:3010/api/v1/resources',
+        // 文件接收服务端。
+        server: 'http://139.196.237.72:3010/api/v1/resources',
 
-    // 选择文件的按钮。可选。
-    // 内部根据当前运行是创建，可能是input元素，也可能是flash.
-    pick: '#picker'
-});
+        // 选择文件的按钮。可选。
+        // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+        pick: '#picker'
+    });
 
-// 当有文件添加进来的时候
-uploader.on( 'fileQueued', function( file ) {
+    // 当有文件添加进来的时候
+    uploadervideo.on( 'fileQueued', function( file ) {
     $list.append( '<div id="' + file.id + '" class="item">' +
         '<h4 class="info">' + file.name + '</h4>' +
         '<p class="state">等待上传...</p>' +
     '</div>' );
-});
+    });
 
-// 文件上传过程中创建进度条实时显示。
-uploader.on( 'uploadProgress', function( file, percentage ) {
+    // 文件上传过程中创建进度条实时显示。
+    uploadervideo.on( 'uploadProgress', function( file, percentage ) {
     var $li = $( '#'+file.id ),
         $percent = $li.find('.progress .progress-bar');
 
@@ -237,21 +496,23 @@ uploader.on( 'uploadProgress', function( file, percentage ) {
     $li.find('p.state').text('上传中');
 
     $percent.css( 'width', percentage * 100 + '%' );
-});
+    });
 
-uploader.on( 'uploadSuccess', function( file ) {
-    $( '#'+file.id ).find('p.state').text('已上传');
-});
+    uploadervideo.on( 'uploadSuccess', function( file,data) {
+      window.teamsvideo = window.teamsvideo || [];
+      window.teamsvideo.push(data.data[0].viewPath);
+      $( '#'+file.id ).find('p.state').text('已上传');
+    });
 
-uploader.on( 'uploadError', function( file ) {
+    uploadervideo.on( 'uploadError', function( file ) {
     $( '#'+file.id ).find('p.state').text('上传出错');
-});
+    });
 
-uploader.on( 'uploadComplete', function( file ) {
+    uploadervideo.on( 'uploadComplete', function( file ) {
     $( '#'+file.id ).find('.progress').fadeOut();
-});
+    });
 
-uploader.on( 'all', function( type ) {
+    uploadervideo.on( 'all', function( type ) {
     if ( type === 'startUpload' ) {
         state = 'uploading';
     } else if ( type === 'stopUpload' ) {
@@ -265,16 +526,138 @@ uploader.on( 'all', function( type ) {
     } else {
         $btn.text('开始上传');
     }
+    });
+
+    $btn.on( 'click', function() {
+    if ( state === 'uploading' ) {
+        uploadervideo.stop();
+    } else {
+        uploadervideo.upload();
+    }
+    });
 });
 
-$btn.on( 'click', function() {
-    if ( state === 'uploading' ) {
-        uploader.stop();
-    } else {
-        uploader.upload();
-    }
-});
-});
+if (getid('id')) {
+  $.ajax({
+      type: "get",
+      //timeout: 2000,
+      async: false,
+      data:{
+        limit:0
+      },
+      url: "http://139.196.237.72:3010/api/v1/teams",
+      success: function(res) {
+          var html='';
+          for (var i = 0; i < res.data.length; i++) {
+            html +='<label class="checkbox">'
+            html +='<input type="checkbox" name="teamlist" value='+ res.data[i].id+'>'
+            html +=''+ res.data[i].id +''
+            html +='</label>'
+          }
+          $("#teamlist").html(html)
+      },
+      error: function(err) {
+          //alert(JSON.stringify(err));
+      }
+  });
+  $.ajax({
+      type: "get",
+      url: "http://139.196.237.72:3010/api/v1/products/"+getid('id')+"",
+      success: function(res) {
+        setTimeout(function(){
+            $("#productname").val(res.data[0].name);
+            UE.getEditor('myEditor').setContent(res.data[0].introduction);
+
+            $("#uploader-photo").html('<img src='+ res.data[0].posterimg +'>');
+            window.photoimg = [res.data[0].posterimg];
+
+            $("#uploader-big").html('<img src='+ res.data[0].backimg +'>');
+            window.bigimg = [res.data[0].backimg];
+
+            $("#uploader-img").html('<img src='+ res.data[0].imgs +'>');
+            window.teamsimg = [res.data[0].imgs];
+
+            $("#uploader").html('<img src='+ res.data[0].videos +'>');
+            window.teamsvideo = [res.data[0].videos];
+        },100);
+      },
+      error: function(err) {
+      }
+  });
+  $("#save").click(function(){
+    $.ajax({
+        type: "put",
+        //timeout: 2000,
+        async: false,
+        data:{
+          name:$("#productname").val(),
+          introduction:UE.getEditor('myEditor').getContent(),
+          posterimg:window.photoimg.join(','),
+          backimg:window.bigimg.join(','),
+          imgs:window.teamsimg.join(','),
+          videos:window.teamsvideo.join(',')
+        },
+        url: "http://139.196.237.72:3010/api/v1/products/"+getid('id')+"",
+        success: function(res) {
+            window.location.href = "product_list.html";
+        },
+        error: function(err) {
+        }
+    });
+  })
+}else{
+  $.ajax({
+      type: "get",
+      //timeout: 2000,
+      async: false,
+      data:{
+        limit:0
+      },
+      url: "http://139.196.237.72:3010/api/v1/teams",
+      success: function(res) {
+          var html='';
+          for (var i = 0; i < res.data.length; i++) {
+            html +='<label class="checkbox">'
+            html +='<input type="checkbox" name="teamlist" value='+ res.data[i].id+'>'
+            html +=''+ res.data[i].name +''
+            html +='</label>'
+          }
+          $("#teamlist").html(html)
+      },
+      error: function(err) {
+          //alert(JSON.stringify(err));
+      }
+  });
+  $("#save").click(function(){
+    var text=[];
+    $("input[name=teamlist]").each(function() {
+        if ($(this).attr("checked")) {
+            text.push($(this).val())
+        }
+    });
+    $.ajax({
+        type: "post",
+        //timeout: 2000,
+        async: false,
+        data:{
+          name:$("#productname").val(),
+          introduction:UE.getEditor('myEditor').getContent(),
+          posterimg:window.photoimg.join(','),
+          backimg:window.bigimg.join(','),
+          imgs:window.teamsimg.join(','),
+          videos:window.teamsvideo.join(','),
+          teamid:text.join(',')
+        },
+        url: "http://139.196.237.72:3010/api/v1/products",
+        success: function(res) {
+            window.location.href = "teams_list.html";
+        },
+        error: function(err) {
+            //alert(JSON.stringify(err));
+        }
+    });
+  })
+}
     </script>
   </body>
 </html>
