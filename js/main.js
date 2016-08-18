@@ -1,6 +1,6 @@
 $(document).ready(function() {
-    window.reqhref = 'http://139.196.237.72:3010'
-    
+    window.reqhref = 'http://139.196.237.72:3010';
+
 
     $('#fullpage').fullpage({
         autoScrolling: false,
@@ -9,19 +9,43 @@ $(document).ready(function() {
     });
 
     // 首页banner
-    var mySwiper = new Swiper('#index_product', {
-        grabCursor: true,
-        paginationClickable: true
-    })
-    $('.arrow-left').on('click', function(e) {
-        e.preventDefault()
-        mySwiper.swipePrev()
-    })
-    $('.arrow-right').on('click', function(e) {
-        e.preventDefault()
-        mySwiper.swipeNext()
-    })
+    $.ajax({
+        type: "get",
+        data: {
+            limit: 0
+        },
+        url: "http://139.196.237.72:3010/api/v1/products",
+        success: function(res) {
+            if (res.data.length != 0) {
+                var itemTemplate = $('#index_product_list').html();
+                var html = res.data.map(function(item, index) {
+                    return itemTemplate
+                        .replace('{editid}', item.id)
+                        .replace('{font}', item.introduction)
+                        .replace('{imgs}', 'src="' + item.imgs.split(',')[0] + '"');
+                }).join('');
 
+                $("#index_product .swiper-wrapper").html(html);
+                var mySwiper = new Swiper('#index_product', {
+                    grabCursor: true,
+                    paginationClickable: true
+                });
+            } else {
+                $("#index_product .swiper-wrapper").html('');
+            }
+            $('.arrow-left').on('click', function(e) {
+                e.preventDefault()
+                mySwiper.swipePrev()
+            })
+            $('.arrow-right').on('click', function(e) {
+                e.preventDefault()
+                mySwiper.swipeNext()
+            })
+        },
+        error: function(err) {
+            //alert(JSON.stringify(err));
+        }
+    })
 
     /*------focus-------*/
     $(".device").hover(
@@ -66,29 +90,8 @@ $(document).ready(function() {
         paginationClickable: true
     })
 
-    var media1 = '<a class="media" href="http://static1.mtime.cn/20160720105244/flash/newvideoplayer.swf?vid=57460&autoplay=1&w=1000&h=563"></a>';
-    $('.sliderimg').bind("click", function() {
-        $('#myModal1').prepend(media1);
-        $('.media').media({
-            width: 600,
-            height: 450
-        });
-    });
-    var media2 = '<a class="media" href="http://static1.mtime.cn/20160720105244/flash/newvideoplayer.swf?vid=57460&autoplay=1&w=1000&h=563"></a>';
-    $('.sliderimg2').bind("click", function() {
-        $('#myModal1').prepend(media2);
-        $('.media').media({
-            width: 600,
-            height: 450
-        });
-    });
-
     //产品详细介绍页面
     var mySwiper4 = new Swiper('#productdetail', {
-        grabCursor: true,
-        paginationClickable: true
-    })
-    var mySwiper5 = new Swiper('#productlist', {
         grabCursor: true,
         paginationClickable: true
     })

@@ -19,49 +19,58 @@
         <img src="images/banner1.png" style="width:100%;height:300px;">
         <div class="w1000">
           <div id="menu">
-              <img src="images/nav_logo.png">
-              <ul>
-                <li data-menuanchor="firstPage" class="active"><a href="#firstPage">首页</a></li>
-                <li data-menuanchor="secondPage"><a href="#secondPage">关于ALAYA</a></li>
-                <li data-menuanchor="3rdPage"><a href="#3rdPage">内容与体验</a></li>
-                <li data-menuanchor="4rdPage"><a href="#3rdPage">造梦师</a></li>
-                <li data-menuanchor="5rdPage"><a href="#3rdPage">媒体报道</a></li>
-                <li data-menuanchor="6rdPage"><a href="#3rdPage">关于我们</a></li>
-              </ul>
+                <img src="images/nav_logo.png">
+                <ul>
+                  <li class="active"><a href="index.html">首页</a></li>
+                  <li><a href="productList.html">内容与体验</a></li>
+                  <li data-menuanchor="4rdPage"><a href="index.html#3rdPage">造梦师</a></li>
+                  <li><a href="about.html">关于Alaya</a></li>
+                  <li><a href="newlist.html">媒体报告</a></li>
+                </ul>
+            </div>
+          <div class="newsection">
           </div>
-
-          <div class="new_list">
-              <img src="testimages/1.png">
-              <div class="new_right">
-                  <h4>很有可能：未来诞生一个VR领域的“BAT”</h4>
-                  <p>“现实这么残酷，挤公交，租房子，宿舍里乱糟糟。但是一戴上VR头盔，屌丝的生活场景被彻底颠覆：阳光海滩、香车美女应有尽有；飞机、游艇更是信手拈来……一半虚拟，一半现实，
-                    未来的世界是可以相互打通、相互关联的，VR将颠覆传统社交模式。”作为一名在游戏行业摸爬滚打了16年的老“极客”，北京极乐互动科技有限公司（下称“极乐互动”）
-                    CEO崔海庆近日在接受《中外管理》专访时，谈起他的VR“社交帝国”，兴致勃勃。
-                  </p>
+          <script type="text/temple" id="newlist">
+              <div class="new_list">
+                  <img {banner}>
+                  <div class="new_right">
+                    <a href="newdetail.html?id={id}">
+                        <h4>{title}</h4>
+                        <p>{introduction}</p>
+                    </a>
+                  </div>
               </div>
-          </div>
-          <div class="new_list">
-              <img src="testimages/1.png">
-              <div class="new_right">
-                  <h4>很有可能：未来诞生一个VR领域的“BAT”</h4>
-                  <p>“现实这么残酷，挤公交，租房子，宿舍里乱糟糟。但是一戴上VR头盔，屌丝的生活场景被彻底颠覆：阳光海滩、香车美女应有尽有；飞机、游艇更是信手拈来……一半虚拟，一半现实，
-                    未来的世界是可以相互打通、相互关联的，VR将颠覆传统社交模式。”作为一名在游戏行业摸爬滚打了16年的老“极客”，北京极乐互动科技有限公司（下称“极乐互动”）
-                    CEO崔海庆近日在接受《中外管理》专访时，谈起他的VR“社交帝国”，兴致勃勃。
-                  </p>
-              </div>
-          </div>
-          <div class="new_list">
-              <img src="testimages/1.png">
-              <div class="new_right">
-                  <h4>很有可能：未来诞生一个VR领域的“BAT”</h4>
-                  <p>“现实这么残酷，挤公交，租房子，宿舍里乱糟糟。但是一戴上VR头盔，屌丝的生活场景被彻底颠覆：阳光海滩、香车美女应有尽有；飞机、游艇更是信手拈来……一半虚拟，一半现实，
-                    未来的世界是可以相互打通、相互关联的，VR将颠覆传统社交模式。”作为一名在游戏行业摸爬滚打了16年的老“极客”，北京极乐互动科技有限公司（下称“极乐互动”）
-                    CEO崔海庆近日在接受《中外管理》专访时，谈起他的VR“社交帝国”，兴致勃勃。
-                  </p>
-              </div>
-          </div>
+          </script>
         </div>
         <script src="js/vendor/jquery-1.12.0.min.js"></script>
+        <script type="text/javascript">
+            $.ajax({
+                type: "get",
+                data: {
+                    limit: 0
+                },
+                url: "http://139.196.237.72:3010/api/v1/news",
+                success: function(res) {
+                  if (res.data.length != 0) {
+                      var itemTemplate = $('#newlist').html();
+                      var html = res.data.map(function(item, index) {
+                          return itemTemplate
+                              .replace('{banner}', 'src="' + item.banner.split(',')[0] + '"')
+                              .replace('{id}', item.id)
+                              .replace('{title}', item.name)
+                              .replace('{introduction}', item.introduction)
+                      }).join('');
+
+                      $(".newsection").append(html);
+                  } else {
+                      $(".newsection").append('');
+                  }
+                },
+                error: function(err) {
+                    //alert(JSON.stringify(err));
+                }
+            })
+        </script>
         <script type="text/javascript" src="js/vendor/idangerous.swiper.min.js"></script>
     </body>
 

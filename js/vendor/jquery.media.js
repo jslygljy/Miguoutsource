@@ -8,7 +8,7 @@
  * http://www.gnu.org/licenses/gpl.html
  *
  * @author: M. Alsup
- * @version: 0.99 (05-JUN-2013)
+ * @version: 0.97 (20-MAY-2011)
  * @requires jQuery v1.1.2 or later
  * $Id: jquery.media.js 2460 2007-07-23 02:53:15Z malsup $
  *
@@ -31,15 +31,10 @@
  * Thanks to Skye Giordano for several great suggestions!
  * Thanks to Richard Connamacher for excellent improvements to the non-IE behavior!
  */
-/*global SWFObject alert Sys */
-/*jshint forin:false */
 ;
 (function($) {
-    "use strict";
 
-    var mode = document.documentMode || 0;
-    var msie = /MSIE/.test(navigator.userAgent);
-    var lameIE = msie && (/MSIE (6|7|8)\.0/.test(navigator.userAgent) || mode < 9);
+    var lameIE = $.browser.msie && $.browser.version < 9;
 
     /**
      * Chainable method for converting elements into rich media.
@@ -70,13 +65,8 @@
 
             var r = getTypesRegExp();
             var m = r.exec(o.src.toLowerCase()) || [''];
-            var fn;
 
-            if (o.type)
-                m[0] = o.type;
-            else
-                m.shift();
-
+            o.type ? m[0] = o.type : m.shift();
             for (var i = 0; i < m.length; i++) {
                 fn = m[i].toLowerCase();
                 if (isDigit(fn[0])) fn = 'fn' + fn; // fns can't begin with numbers
@@ -126,13 +116,15 @@
         width: 400,
         height: 400,
         autoplay: 0, // normalized cross-player setting
-        bgColor: '#ffffff', // background color
+        bgColor: 'black', // background color
         params: {
             wmode: 'transparent'
         }, // added to object element as param elements; added to embed element as attrs
         attrs: {}, // added to object and embed elements as attrs
         flvKeyName: 'file', // key used for object src param (thanks to Andrea Ercolino)
-        flashvars: {}, // added to flash content as flashvars param/attr
+        flashvars: {
+            autostart: true
+        }, // added to flash content as flashvars param/attr
         flashVersion: '7', // required flash version
         expressInstaller: null, // src for express installer
 
@@ -193,7 +185,7 @@
             name: 'winmedia',
             title: 'Windows Media',
             types: 'asx,asf,avi,wma,wmv',
-            mimetype: isFirefoxWMPPluginInstalled() ? 'application/x-ms-wmp' : 'application/x-mplayer2',
+            mimetype: $.browser.mozilla && isFirefoxWMPPluginInstalled() ? 'application/x-ms-wmp' : 'application/x-mplayer2',
             pluginspage: 'http://www.microsoft.com/Windows/MediaPlayer/',
             autoplayAttr: 'autostart',
             oUrl: 'url',
@@ -226,7 +218,7 @@
     // detection script for FF WMP plugin (http://www.therossman.org/experiments/wmp_play.html)
     // (hat tip to Mark Ross for this script)
     function isFirefoxWMPPluginInstalled() {
-        var plugs = navigator.plugins || [];
+        var plugs = navigator.plugins;
         for (var i = 0; i < plugs.length; i++) {
             var plugin = plugs[i];
             if (plugin['filename'] == 'np-mswmp.dll')
@@ -244,38 +236,37 @@
             $.fn.media[o] = $.fn.media[player] = getGenerator(player);
             $.fn.media[o + '_player'] = $.fn.media.defaults.players[player];
         });
-    }
+    };
 
     function getTypesRegExp() {
         var types = '';
         for (var player in $.fn.media.defaults.players) {
             if (types.length) types += ',';
             types += $.fn.media.defaults.players[player].types;
-        }
+        };
         return new RegExp('\\.(' + types.replace(/,/ig, '|') + ')\\b');
-    }
+    };
 
     function getGenerator(player) {
         return function(el, options) {
             return generate(el, options, player);
         };
-    }
+    };
 
     function isDigit(c) {
         return '0123456789'.indexOf(c) > -1;
-    }
+    };
 
     // flatten all possible options: global defaults, meta, option obj
     function getSettings(el, options) {
         options = options || {};
-        var a, n;
         var $el = $(el);
         var cls = el.className || '';
         // support metadata plugin (v1.0 and v2.0)
         var meta = $.metadata ? $el.metadata() : $.meta ? $el.data() : {};
         meta = meta || {};
-        var w = meta.width || parseInt(((cls.match(/\bw:(\d+)/) || [])[1] || 0), 10) || parseInt(((cls.match(/\bwidth:(\d+)/) || [])[1] || 0), 10);
-        var h = meta.height || parseInt(((cls.match(/\bh:(\d+)/) || [])[1] || 0), 10) || parseInt(((cls.match(/\bheight:(\d+)/) || [])[1] || 0), 10);
+        var w = meta.width || parseInt(((cls.match(/\bw:(\d+)/) || [])[1] || 0)) || parseInt(((cls.match(/\bwidth:(\d+)/) || [])[1] || 0));
+        var h = meta.height || parseInt(((cls.match(/\bh:(\d+)/) || [])[1] || 0)) || parseInt(((cls.match(/\bheight:(\d+)/) || [])[1] || 0))
 
         if (w) meta.width = w;
         if (h) meta.height = h;
@@ -284,7 +275,8 @@
         // crank html5 style data attributes
         var dataName = 'data-';
         for (var i = 0; i < el.attributes.length; i++) {
-            a = el.attributes[i], n = $.trim(a.name);
+            var a = el.attributes[i],
+                n = $.trim(a.name);
             var index = n.indexOf(dataName);
             if (index === 0) {
                 n = n.substring(dataName.length);
@@ -292,7 +284,7 @@
             }
         }
 
-        a = $.fn.media.defaults;
+        var a = $.fn.media.defaults;
         var b = options;
         var c = meta;
 
@@ -311,7 +303,7 @@
         // make sure we have a source!
         opts.src = opts.src || $el.attr('href') || $el.attr('src') || 'unknown';
         return opts;
-    }
+    };
 
     //
     //	Flash Player
@@ -319,12 +311,11 @@
 
     // generate flash using SWFObject library if possible
     $.fn.media.swf = function(el, opts) {
-        var f, p;
         if (!window.SWFObject && !window.swfobject) {
             // roll our own
             if (opts.flashvars) {
                 var a = [];
-                for (f in opts.flashvars)
+                for (var f in opts.flashvars)
                     a.push(f + '=' + opts.flashvars[f]);
                 if (!opts.params) opts.params = {};
                 opts.params.flashvars = a.join('&');
@@ -342,7 +333,7 @@
             if (!el.id) el.id = 'movie_player_' + counter++;
 
             // replace el with swfobject content
-            window.swfobject.embedSWF(opts.src, el.id, opts.width, opts.height, opts.flashVersion,
+            swfobject.embedSWF(opts.src, el.id, opts.width, opts.height, opts.flashVersion,
                 opts.expressInstaller, opts.flashvars, opts.params, opts.attrs);
         }
         // swfobject < v2
@@ -351,9 +342,9 @@
             var so = new SWFObject(opts.src, 'movie_player_' + counter++, opts.width, opts.height, opts.flashVersion, opts.bgColor);
             if (opts.expressInstaller) so.useExpressInstall(opts.expressInstaller);
 
-            for (p in opts.params)
+            for (var p in opts.params)
                 if (p != 'bgColor') so.addParam(p, opts.params[p]);
-            for (f in opts.flashvars)
+            for (var f in opts.flashvars)
                 so.addVariable(f, opts.flashvars[f]);
             so.write($div[0]);
         }
@@ -428,7 +419,6 @@
     function generate(el, opts, player) {
         var $el = $(el);
         var o = $.fn.media.defaults.players[player];
-        var a, key, v;
 
         if (player == 'iframe') {
             o = $('<iframe' + ' width="' + opts.width + '" height="' + opts.height + '" >');
@@ -437,35 +427,35 @@
         } else if (player == 'img') {
             o = $('<img>');
             o.attr('src', opts.src);
-            if (opts.width)
-                o.attr('width', opts.width);
-            if (opts.height)
-                o.attr('height', opts.height);
+            opts.width && o.attr('width', opts.width);
+            opts.height && o.attr('height', opts.height);
             o.css('backgroundColor', o.bgColor);
         } else if (lameIE) {
-            a = ['<object width="' + opts.width + '" height="' + opts.height + '" '];
-            for (key in opts.attrs)
+            var a = ['<object width="' + opts.width + '" height="' + opts.height + '" '];
+            for (var key in opts.attrs)
                 a.push(key + '="' + opts.attrs[key] + '" ');
-            for (key in o.ieAttrs || {}) {
-                v = o.ieAttrs[key];
+            for (var key in o.ieAttrs || {}) {
+                var v = o.ieAttrs[key];
                 if (key == 'codebase' && window.location.protocol == 'https:')
                     v = v.replace('http', 'https');
                 a.push(key + '="' + v + '" ');
             }
             a.push('></ob' + 'ject' + '>');
             var p = ['<param name="' + (o.oUrl || 'src') + '" value="' + opts.src + '">'];
-            for (key in opts.params)
+            for (var key in opts.params)
                 p.push('<param name="' + key + '" value="' + opts.params[key] + '">');
-            o = document.createElement(a.join(''));
+            p.push('<param name="allowscriptaccess" value="always"/>');
+            p.push('<param name="allowfullscreen" value="true"/>');
+            var o = document.createElement(a.join(''));
             for (var i = 0; i < p.length; i++)
                 o.appendChild(document.createElement(p[i]));
         } else if (opts.standards) {
             // Rewritten to be standards compliant by Richard Connamacher
-            a = ['<object type="' + o.mimetype + '" width="' + opts.width + '" height="' + opts.height + '"'];
+            var a = ['<object type="' + o.mimetype + '" width="' + opts.width + '" height="' + opts.height + '"'];
             if (opts.src) a.push(' data="' + opts.src + '" ');
-            if (msie) {
-                for (key in o.ieAttrs || {}) {
-                    v = o.ieAttrs[key];
+            if ($.browser.msie) {
+                for (var key in o.ieAttrs || {}) {
+                    var v = o.ieAttrs[key];
                     if (key == 'codebase' && window.location.protocol == 'https:')
                         v = v.replace('http', 'https');
                     a.push(key + '="' + v + '" ');
@@ -473,22 +463,24 @@
             }
             a.push('>');
             a.push('<param name="' + (o.oUrl || 'src') + '" value="' + opts.src + '">');
-            for (key in opts.params) {
+            for (var key in opts.params) {
                 if (key == 'wmode' && player != 'flash') // FF3/Quicktime borks on wmode
                     continue;
                 a.push('<param name="' + key + '" value="' + opts.params[key] + '">');
             }
+            a.push('<param name="allowscriptaccess" value="always"/>');
+            a.push('<param name="allowfullscreen" value="true"/>');
             // Alternate HTML
             a.push('<div><p><strong>' + o.title + ' Required</strong></p><p>' + o.title + ' is required to view this media. <a href="' + o.pluginspage + '">Download Here</a>.</p></div>');
             a.push('</ob' + 'ject' + '>');
         } else {
-            a = ['<embed width="' + opts.width + '" height="' + opts.height + '" style="display:block"'];
+            var a = ['<embed width="' + opts.width + '" height="' + opts.height + '" style="display:block"'];
             if (opts.src) a.push(' src="' + opts.src + '" ');
-            for (key in opts.attrs)
+            for (var key in opts.attrs)
                 a.push(key + '="' + opts.attrs[key] + '" ');
-            for (key in o.eAttrs || {})
+            for (var key in o.eAttrs || {})
                 a.push(key + '="' + o.eAttrs[key] + '" ');
-            for (key in opts.params) {
+            for (var key in opts.params) {
                 if (key == 'wmode' && player != 'flash') // FF3/Quicktime borks on wmode
                     continue;
                 a.push(key + '="' + opts.params[key] + '" ');
@@ -500,15 +492,10 @@
         var cls = opts.cls ? (' class="' + opts.cls + '"') : '';
         var $div = $('<div' + id + cls + '>');
         $el.after($div).remove();
-        if (lameIE || player == 'iframe' || player == 'img')
-            $div.append(o);
-        else
-            $div.html(a.join(''));
-
-        if (opts.caption)
-            $('<div>').appendTo($div).html(opts.caption);
+        (lameIE || player == 'iframe' || player == 'img') ? $div.append(o): $div.html(a.join(''));
+        if (opts.caption) $('<div>').appendTo($div).html(opts.caption);
         return $div;
-    }
+    };
 
 
 })(jQuery);

@@ -21,11 +21,10 @@
             <img src="images/nav_logo.png">
             <ul>
               <li data-menuanchor="firstPage" class="active"><a href="#firstPage">首页</a></li>
-              <li data-menuanchor="secondPage"><a href="#secondPage">关于ALAYA</a></li>
-              <li data-menuanchor="3rdPage"><a href="#3rdPage">内容与体验</a></li>
-              <li data-menuanchor="4rdPage"><a href="#3rdPage">造梦师</a></li>
-              <li data-menuanchor="5rdPage"><a href="#3rdPage">媒体报道</a></li>
-              <li data-menuanchor="6rdPage"><a href="#3rdPage">关于我们</a></li>
+              <li data-menuanchor="secondPage"><a href="#secondPage">内容与体验</a></li>
+              <li data-menuanchor="3rdPage"><a href="#3rdPage">造梦团队</a></li>
+              <li data-menuanchor="4rdPage"><a href="#4rdPage">关于Alaya</a></li>
+              <li data-menuanchor="5rdPage"><a href="#5rdPage">关于我们</a></li>
             </ul>
         </div>
         <!--  fullpage框架  -->
@@ -43,55 +42,43 @@
                 <a class="arrow-right" href="#"></a>
                 <div class="swiper-container" id="index_product">
                   <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                      <img src="images/banner1.png">
-                      <div class="focusL"><label>“这是一场弥漫着黑暗气息的梦境，但我却不愿醒来，即使这里的空气令我颤栗，我却始终在寻找着…因为深爱的她，我那失踪的妻子，曾迷失在这里，无论将要面临什么，我都要带她回家。我的爱与呼吸，将伴随她的灵魂存在，你会愿意陪我找到她吗…”<label></div>
-                    </div>
-                    <div class="swiper-slide">
-                      <div>飞机迪斯科浪费就打算立刻解放了迪斯科解放简历库</div>
-                    </div>
+                    <script type="text/temple" id="index_product_list">
+                      <div class="swiper-slide">
+                        <a href="prodetail.html?id={editid}">
+                          <img {imgs}>
+                          <div class="focusL"><label>{font}<label></div>
+                        </a>
+                      </div>
+                    </script>
                   </div>
                 </div>
                 <div class="pagination"></div>
               </div>
 
               <ul class="new_list">
-                <li><label>Top 1</label><a href="">产业链上游VR内容永远都是刚需</a></li>
-                <li><label>Top 2</label><a href="">产业链上游VR内容永远都是刚需</a></li>
-                <li><label>Top 3</label><a href="">产业链上游VR内容永远都是刚需</a></li>
               </ul>
               <a class="see" href="">See More</a>
           </div>
           <div class="section" id="section2">
-              <div class="left_view">
-                <figure class="effect-selena">
-                  <img src="photo/all.png" alt="img10">
-                  <figcaption>
-                    <h2>造梦团队</h2>
-                    <p>瑞通介绍瑞通介绍瑞通介绍瑞通介绍瑞通介绍<br>
-                    瑞通介绍瑞通介绍瑞通介绍瑞通介绍
-                      <img src="testimages/team_logo.png" alt="">
-                    </p>
-                  </figcaption>
-                </figure>
+            <div class="w1000">
+              <h2 class="other_h2">造梦团队</h2>
+            </div>
+              <div class="teamsection w1000">
               </div>
-              <div class="right_view">
-                <figure class="effect-selena">
-                  <img src="photo/all.png" alt="img10">
-                  <figcaption>
-                    <h2>造梦团队</h2>
-                    <p>瑞通介绍瑞通介绍瑞通介绍瑞通介绍瑞通介绍<br>
-                    瑞通介绍瑞通介绍瑞通介绍瑞通介绍
-                      <img src="testimages/team_logo.png" alt="">
-                    </p>
-                  </figcaption>
-                </figure>
-              </div>
+                <script type="text/temple" id="teamlist">
+                <div class="indexteamlist">
+                    <div class="indexteamleft">
+                        <img {logo} alt="">
+                    </div>
+                    <div class="indexteamright">
+                      {content}
+                    </div>
+                    <a href="teamdetail.html?id={id}">走进{name}</a>
+                </div>
+                </script>
           </div>
           <div class="section" id="section3">
               <img src="images/map.png">
-              <img src="images/address.png" class="postion_img">
-              <a href="" class="see">See More</a>
           </div>
           <div class="section" id="section4">
               <div style="margin-bottom:50px;"><img src="images/nav_logo.png"></div>
@@ -129,5 +116,52 @@
         <script type="text/javascript" src="js/vendor/jquery.fullPage.js"></script>
         <script type="text/javascript" src="js/vendor/idangerous.swiper.min.js"></script>
         <script src="js/main.js"></script>
+        <script type="text/javascript">
+          $.ajax({
+              type: "get",
+              data: {
+                  limit: 0
+              },
+              url: "http://139.196.237.72:3010/api/v1/news",
+              success: function(res) {
+
+                  var html = ''
+                  for (var i = 0; i < 3; i++) {
+                    html += '<li><label>Top '+(i+1)+'</label><a href="newdetail?id='+res.data[i].id+'">'+res.data[i].name+'</a></li>'
+                  }
+                $(".new_list").html(html);
+              },
+              error: function(err) {
+                  //alert(JSON.stringify(err));
+              }
+          })
+
+          $.ajax({
+              type: "get",
+              data: {
+                  limit: 0
+              },
+              url: "http://139.196.237.72:3010/api/v1/teams",
+              success: function(res) {
+                if (res.data.length != 0) {
+                    var itemTemplate = $('#teamlist').html();
+                    var html = res.data.map(function(item, index) {
+                        return itemTemplate
+                            .replace('{logo}', 'src="' + item.logo.split(',')[0] + '"')
+                            .replace('{id}', item.id)
+                            .replace('{content}', item.introduction)
+                            .replace('{name}', item.name)
+                    }).join('');
+
+                    $(".teamsection").append(html);
+                } else {
+                    $(".teamsection").append('');
+                }
+              },
+              error: function(err) {
+                  //alert(JSON.stringify(err));
+              }
+          })
+        </script>
     </body>
 </html>
