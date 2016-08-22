@@ -36,12 +36,10 @@ $(document).ready(function() {
         window.location.href = "login.html";
     }
     $.ajax({
-        type: "post",
+        type: "get",
         //timeout: 2000,
         async: false,
-        contentType: "text/json",
         url: "left.html",
-        jsonp: 'callback',
         success: function(res) {
             $("#wrap").before(res);
         },

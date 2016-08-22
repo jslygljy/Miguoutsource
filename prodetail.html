@@ -43,6 +43,7 @@
         <!--  详细介绍页面详细   -->
         <div class="teamcontent1">
             <div class="posterleft">
+                <img src="" alt="">
             </div>
 
             <div class="posterright">
@@ -123,7 +124,7 @@
                   }
                   $("#productimglist .swiper-slide").html(html)
                   $('.sliderimg').on("click", function() {
-                      $('#myModal1').prepend('<a class="media" href="http://139.196.237.72:81/1471510390443migu.flv"></a>');
+                      $('#myModal1').prepend('<a class="media" href="http://139.196.237.72:80/'+ res.data[0].videos +'"></a>');
                       $('.media').media({
                           width: 600,
                           height: 450
@@ -143,8 +144,9 @@
               },
               url: "http://139.196.237.72:3010/api/v1/evaluates/relation/"+getid('id')+"/1",
               success: function(res) {
+                  console.log(res)
                   var html = '';var html2 = '';
-                  for (var i = 0; i < res.data.length; i++) {
+                  for (var i = 0; i <=2; i++) {
                     html +='<div class="productnewlist">'
                     html +='<div class="listleft">'
                     html +='<span>Top'+ (i+1) +'</span>'
@@ -156,6 +158,8 @@
                     html +='<span class="newTime">'+ res.data[i].createtime +'</span>'
                     html +='</div>'
                     html +='</div>';
+                  }
+                  for (var i = 0; i < res.data.length; i++) {
                     html2 +='<div class="discueslist">'
                     html2 +='<div class="otherleft">'
                     html2 +='<img src="'+res.data[i].url+'" alt="">'

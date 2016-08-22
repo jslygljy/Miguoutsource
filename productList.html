@@ -18,80 +18,142 @@
     <body>
         <div class="w1000">
           <div id="menu">
-                <img src="images/nav_logo.png">
-                <ul>
-                  <li class="active"><a href="index.html">首页</a></li>
-                  <li><a href="productList.html">内容与体验</a></li>
-                  <li data-menuanchor="4rdPage"><a href="index.html#3rdPage">造梦师</a></li>
-                  <li><a href="about.html">关于Alaya</a></li>
-                  <li><a href="newlist.html">媒体报告</a></li>
-                </ul>
-            </div>
+              <img src="images/nav_logo.png">
+              <ul>
+                <li class="active"><a href="index.html">首页</a></li>
+                <li><a href="productList.html">内容与体验</a></li>
+                <li data-menuanchor="4rdPage"><a href="index.html#3rdPage">造梦师</a></li>
+                <li><a href="about.html">关于Alaya</a></li>
+                <li><a href="newlist.html">媒体报告</a></li>
+              </ul>
+          </div>
           <!--   评论列表  -->
           <div class="mt170 mb40">
-            <div class="flex-container product_list">
-              <figure class="effect-selena flex-1">
-                <img src="photo/1.jpg" alt="img10">
-                <figcaption>
-                  <p>最好的体验</p>
-                  <span>只有体验材质到-名字</span>
-                </figcaption>
-              </figure>
-              <figure class="effect-selena flex-1">
-                <img src="photo/1.jpg" alt="img10">
-                <figcaption>
-                  <p>最好的体验</p>
-                  <span>只有体验材质到-名字</span>
-                </figcaption>
-              </figure>
-              <figure class="effect-selena flex-1">
-                <img src="photo/1.jpg" alt="img10">
-                <figcaption>
-                  <p>最好的体验</p>
-                  <span>只有体验材质到-名字</span>
-                </figcaption>
-              </figure>
+            <div class="commit_list">
             </div>
+            <script type="text/temple" id="product_commitList">
+            <figure class="effect-selena">
+              <img {url} alt="img10">
+              <figcaption>
+                <p>{title}</p>
+              </figcaption>
+            </figure>
+            </script>
           </div>
           <!-- 左边新闻列表  -->
           <div class="newlist">
-            <div class="new_list">
-                <img src="testimages/1.png">
-                <div class="new_right">
-                    <h4>很有可能：未来诞生一个VR领域的“BAT”</h4>
-                    <p>“现实这么残酷，挤公交，租房子，宿舍里乱糟糟。但是一戴上VR头盔，屌丝的生活场景被彻底颠覆：阳光海滩、香车美女应有尽有；飞机、游艇更是信手拈来……一半虚拟，一半现实，
-                    </p>
-                </div>
-            </div>
-            <div class="new_list">
-                <img src="testimages/1.png">
-                <div class="new_right">
-                    <h4>很有可能：未来诞生一个VR领域的“BAT”</h4>
-                    <p>“现实这么残酷，挤公交，租房子，宿舍里乱糟糟。但是一戴上VR头盔，屌丝的生活场景被彻底颠覆：阳光海滩、香车美女应有尽有；飞机、游艇更是信手拈来……一半虚拟，一半现实，
-                    </p>
-                </div>
-            </div>
-            <div class="new_list">
-                <img src="testimages/1.png">
-                <div class="new_right">
-                    <h4>很有可能：未来诞生一个VR领域的“BAT”</h4>
-                    <p>“现实这么残酷，挤公交，租房子，宿舍里乱糟糟。但是一戴上VR头盔，屌丝的生活场景被彻底颠覆：阳光海滩、香车美女应有尽有；飞机、游艇更是信手拈来……一半虚拟，一半现实，
-                    </p>
-                </div>
-            </div>
-          </div>
 
+          </div>
+          <script type="text/temple" id="product_newsList">
+          <div class="new_list">
+              <img {banner}>
+              <div class="new_right">
+                  <h4>{title}</h4>
+                  <p>{content}</p>
+              </div>
+          </div>
+          </script>
           <!-- 右边的海报  -->
           <div class="rightpages">
               <h2>正在热映</h2>
-              <div class="pagesli">
-                <img src="photo/1.jpg" alt="">
-                <p class="other_h2">产品标题</p>
-              </div>
+              <div class="product_rightList"></div>
           </div>
         </div>
+        <script type="text/temple" id="product_rightList">
+        <div class="pagesli">
+          <img {photo} alt="">
+          <p class="other_h2">{content}</p>
+        </div>
+        </script>
+        <script type="text/javascript" src="js/vendor/jquery-1.12.0.min.js"></script>
+        <script type="text/javascript">
+          $.ajax({
+              type: "get",
+              //timeout: 2000,
+              async: false,
+              data:{
+                limit:0
+              },
+              url: "http://139.196.237.72:3010/api/v1/evaluates/type/3",
+              success: function(res) {
+                if (res.data.length != 0) {
+                  var itemTemplate = $('#product_commitList').html();
+                      var html = res.data.map(function(item,index) {
+                        return itemTemplate
+                          .replace('{title}', item.title)
+                          .replace('{contente}', item.content)
+                          .replace('{url}', 'src="' + item.url.split(',')[0] + '"')
+                    }).join('');
 
-        <script type="text/javascript" src="../resources/js/jquery-1.10.2.min.js"></script>
+                  $(".commit_list").html(html);
+                }
+                else{
+                  $(".commit_list").html('');
+                }
+              },
+              error: function(err) {
+                  //alert(JSON.stringify(err));
+              }
+          });
+
+          $.ajax({
+              type: "get",
+              //timeout: 2000,
+              async: false,
+              data:{
+                limit:0
+              },
+              url: "http://139.196.237.72:3010/api/v1/news/type/3",
+              success: function(res) {
+                if (res.data.length != 0) {
+                  var itemTemplate = $('#product_newsList').html();
+                      var html = res.data.map(function(item,index) {
+                        return itemTemplate
+                          .replace('{title}', item.name)
+                          .replace('{content}', item.introduction)
+                          .replace('{banner}', 'src="' + item.banner.split(',')[0] + '"')
+                    }).join('');
+
+                  $(".newlist").html(html);
+                }
+                else{
+                  $(".newlist").html('');
+                }
+              },
+              error: function(err) {
+                  //alert(JSON.stringify(err));
+              }
+          });
+
+          $.ajax({
+              type: "get",
+              //timeout: 2000,
+              async: false,
+              data:{
+                limit:0
+              },
+              url: "http://139.196.237.72:3010/api/v1/products",
+              success: function(res) {
+                console.log(res)
+                if (res.data.length != 0) {
+                  var itemTemplate = $('#product_rightList').html();
+                      var html = res.data.map(function(item,index) {
+                        return itemTemplate
+                          .replace('{content}', item.name)
+                          .replace('{photo}', 'src="' + item.backimg.split(',')[0] + '"')
+                    }).join('');
+
+                  $(".product_rightList").html(html);
+                }
+                else{
+                  $(".product_rightList").html('');
+                }
+              },
+              error: function(err) {
+                  //alert(JSON.stringify(err));
+              }
+          });
+        </script>
     </body>
 
 </html>

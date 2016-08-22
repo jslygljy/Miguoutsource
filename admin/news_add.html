@@ -64,6 +64,13 @@
                       </label>
                     </div>
                   </div>
+                  <div class="control-group" id="selectlist" style="display:none">
+                    <label class="control-label">选择列表:</label>
+                    <div class="controls">
+                      <select tabindex="1" data-placeholder="Select here.." class="span7">
+                      </select>
+                   </div>
+                  </div>
                   <div class="control-group" id="isteam" style="display:none;">
                     <label class="control-label">团队新闻类型：</label>
                       <div class="controls">
@@ -204,8 +211,29 @@
         if ($(this).attr("checked") == 'checked') {
             $("#isteam").show();
             $("#notteam").hide();
+            $("#selectlist").show();
+            $.ajax({
+                type: "get",
+                //timeout: 2000,
+                async: false,
+                data:{
+                  limit:0
+                },
+                url: "http://139.196.237.72:3010/api/v1/teams",
+                success: function(res) {
+                    var html='';
+                    for (var i = 0; i < res.data.length; i++) {
+                      html +='<option value='+ res.data[i].id +'>'+ res.data[i].name +'</option>'
+                    }
+                    $("#selectlist select").html(html)
+                },
+                error: function(err) {
+                    //alert(JSON.stringify(err));
+                }
+            });
         }else{
           $("#isteam").hide();
+          $("#selectlist").hide();
           $("#notteam").show();
         }
     })
@@ -384,7 +412,8 @@ if (getid('id')) {
           ismajor:mainblooen,
           type:type,
           linkurl:$("#newshref input").val(),
-          banner:window.bannerimg.join(',')
+          banner:window.bannerimg.join(','),
+          teamid:$("#selectlist select").val()
         },
         url: "http://139.196.237.72:3010/api/v1/news/"+getid('id')+"",
         success: function(res) {
@@ -424,7 +453,8 @@ if (getid('id')) {
           type:type,
           heat:1,
           linkurl:$("#newshref input").val(),
-          banner:window.bannerimg.join(',')
+          banner:window.bannerimg.join(','),
+          teamid:$("#selectlist select").val()
         },
         url: "http://139.196.237.72:3010/api/v1/news",
         success: function(res) {

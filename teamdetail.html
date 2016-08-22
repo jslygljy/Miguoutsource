@@ -16,23 +16,23 @@
         <link rel="stylesheet" type="text/css" href="css/idangerous.swiper.css">
     </head>
   <body>
-    <div id="menu">
-          <img src="images/nav_logo.png">
-          <ul>
-            <li class="active"><a href="index.html">首页</a></li>
-            <li><a href="productList.html">内容与体验</a></li>
-            <li data-menuanchor="4rdPage"><a href="index.html#3rdPage">造梦师</a></li>
-            <li><a href="about.html">关于Alaya</a></li>
-            <li><a href="newlist.html">媒体报告</a></li>
-          </ul>
-      </div>
 
       <!-- 居中内容区  -->
       <div class="w1000">
+        <div id="menu">
+              <img src="images/nav_logo.png">
+              <ul>
+                <li class="active"><a href="index.html">首页</a></li>
+                <li><a href="productList.html">内容与体验</a></li>
+                <li data-menuanchor="4rdPage"><a href="index.html#3rdPage">造梦师</a></li>
+                <li><a href="about.html">关于Alaya</a></li>
+                <li><a href="newlist.html">媒体报告</a></li>
+              </ul>
+          </div>
         <!--  详细介绍页面大banner  -->
         <div class="bigbanner mt170">
-            <img src="testimages/3.png" class="teamall" alt="">
-            <img src="testimages/team_logo.png" class="teamlogo" alt="">
+          <img class="teamall" alt="">
+          <img class="teamlogo" alt="">
         </div>
 
         <!--  弹框播放器    -->
@@ -41,39 +41,22 @@
         </div>
         <!--  详细介绍页面详细   -->
         <div class="teamcontent1">
-            <div class="posterleft">
-              <div class="swiper-container" id="teamdetail">
-                <div class="swiper-wrapper">
-                  <div class="swiper-slide">
-                    <img src="testimages/1.png">
-                  </div>
-                  <div class="swiper-slide">
-                    <img src="testimages/1.png">
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div class="posterleft">
+            <img alt="">
+          </div>
 
             <div class="posterright">
-              <div class="postertitle">奥境VR体验首作《灵·月蚀》</div>
+              <div class="postertitle"></div>
               <div class="gameteam">
-                <p>这里是锐瞳的作品介绍。这里是锐瞳的作品介绍。这里是锐瞳的作品介绍。这里是锐瞳的作品介绍。这里是锐瞳的作品介绍。这里是锐瞳的作品介绍。这里是锐瞳的作品介绍。这里是锐瞳的作品介绍。这里是锐瞳的作品介绍。这里是锐瞳的作品介绍。这里是锐瞳的作品介绍。这里是锐瞳的作品介绍。这里是锐瞳的作品介绍。这里是锐瞳的作品介绍。这里是锐瞳的作品介绍。这里是锐瞳的作品介绍。这里是锐瞳的作品介绍。这里是锐瞳的作品介绍……</p>
               </div>
               <div class="gamevideo">
                 <span class="gamespangrey">主要作品>></span>
                 <div class="swiper-container" id="teamproduct">
+                  <div class="swiper-scrollbar"></div>
                   <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                      <a href="#" data-reveal-id="myModal1"><img class="sliderimg" src="photo/1.jpg" alt=""></a>
-                    </div>
-                    <div class="swiper-slide">
-                      <a href="#" data-reveal-id="myModal1"><img class="sliderimg2" src="photo/2.jpg" alt=""></a>
-                    </div>
-                    <div class="swiper-slide">
-                      <img src="photo/3.jpg" alt="">
-                    </div>
                   </div>
                 </div>
+
               </div>
             </div>
         </div>
@@ -118,13 +101,75 @@
             </div>
         </div>
       </div>
-      <script src="js/vendor/jquery-1.12.0.min.js"></script>
+      <script src="js/vendor/jquery-1.7.1.min.js"></script>
       <script type="text/javascript" src="js/vendor/jquery-ui.min.js"></script>
       <script type="text/javascript" src="js/vendor/jquery.fullPage.js"></script>
       <script type="text/javascript" src="js/vendor/idangerous.swiper.min.js"></script>
+
+      <script src="js/main.js"></script>
+      <script type="text/javascript">
+      function getid(name) {
+          var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+          var param = window.location.search.substring(1).match(reg);
+          if (param !== null) {
+              return param[2];
+          } else {
+              return undefined;
+          }
+      }
+      $.ajax({
+          type: "get",
+          //timeout: 2000,
+          async: false,
+          data:{
+            limit:0
+          },
+          url: "http://139.196.237.72:3010/api/v1/teams/"+getid('id')+"",
+          success: function(res) {
+              console.log(res)
+              $(".bigbanner img:eq(0)").attr("src",res.data[0].posterimg);
+              $(".bigbanner img:eq(1)").attr("src",res.data[0].logo);
+              $(".posterleft img").attr("src",res.data[0].posterimg);
+              $(".postertitle").html(res.data[0].name);
+              $(".gameteam").html(''+ res.data[0].introduction +'');
+              var html = '<a href="#" data-reveal-id="myModal1" style="width:200px;" class="swiper-slide"><img class="sliderimg" src='+res.data[0].posterimg+' alt=""></a>';
+              var imgmath = res.data[0].imgs.split(',');
+              for (var i = 0; i < imgmath.length; i++) {
+                html +='<div class="swiper-slide"  style="width:200px"><img src="'+ imgmath[i] +'"></div>'
+              }
+              $("#teamproduct .swiper-wrapper").html(html)
+              $('.sliderimg').on("click", function() {
+                  $('#myModal1').prepend('<a class="media" href="http://139.196.237.72:80/'+ res.data[0].videos +'"></a>');
+                  $('.media').media({
+                      width: 600,
+                      height: 450
+                  });
+              });
+              var mySwiper3 = new Swiper('#teamproduct', {
+                paginationClickable: true,
+                slidesPerView :4,
+              })
+          },
+          error: function(err) {
+          }
+      });
+      $.ajax({
+          type: "get",
+          //timeout: 2000,
+          async: false,
+          data:{
+            limit:0
+          },
+          url: "http://139.196.237.72:3010/api/v1/news/"+getid('id')+"",
+          success: function(res) {
+              console.log(res)
+          },
+          error: function(err) {
+          }
+      });
+      </script>
       <script type="text/javascript" src="js/vendor/jquery.reveal.js"></script>
       <script type="text/javascript" src="js/vendor/jquery.media.js"></script>
-      <script src="js/main.js"></script>
   </body>
 
 </html>

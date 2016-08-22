@@ -141,7 +141,7 @@
         url: "http://139.196.237.72:3010/api/v1/evaluates/type/1",
         success: function(res) {
           if (res.data.length != 0) {
-            var itemTemplate = $('#comment_list').html();
+            var itemTemplate = $('#templelist').html();
                 var html = res.data.map(function(item,index) {
                   return itemTemplate
                     .replace('{title}', item.title)

@@ -131,6 +131,7 @@
         },
         url: "http://139.196.237.72:3010/api/v1/news",
         success: function(res) {
+            console.log(res)
             if (res.data.length != 0) {
           		var itemTemplate = $('#newslist').html();
                   var html = res.data.map(function(item,index) {
@@ -141,7 +142,7 @@
                   }else{
                     isboolen = '否'
                   }
-                  if (item.isteam = 0) {
+                  if (item.isteam ==0) {
                       typename = ['内部新闻','媒体外链','内容与体验']
                   }else{
                       typename = ['团队咨询','造梦师专访']

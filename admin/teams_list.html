@@ -70,7 +70,7 @@
                             </a>
                             <ul class="dropdown-menu pull-right">
                               <li><a href="teams_add.html?id={editid}"><i class="icon-edit"></i>修改</a></li>
-                              <li id="dellist" name={delid}><a href="#"><i class="icon-trash"></i>删除</a></li>
+                              <li class="dellist" name={delid}><a href="#"><i class="icon-trash"></i>删除</a></li>
                             </ul>
                           </div>
                         </td>
@@ -162,8 +162,7 @@
         }
     });
 
-
-    $("#dellist").click(function(){
+    $(".dellist").click(function(){
       $.ajax({
           type: "delete",
           //timeout: 2000,

@@ -85,10 +85,7 @@ $(document).ready(function() {
         paginationClickable: true
     })
 
-    var mySwiper3 = new Swiper('#teamproduct', {
-        grabCursor: true,
-        paginationClickable: true
-    })
+    
 
     //产品详细介绍页面
     var mySwiper4 = new Swiper('#productdetail', {
