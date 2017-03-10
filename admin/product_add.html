@@ -551,7 +551,7 @@ if (getid('id')) {
           for (var i = 0; i < res.data.length; i++) {
             html +='<label class="checkbox">'
             html +='<input type="checkbox" name="teamlist" value='+ res.data[i].id+'>'
-            html +=''+ res.data[i].id +''
+            html +=''+ res.data[i].name +''
             html +='</label>'
           }
           $("#teamlist").html(html)

@@ -5,7 +5,7 @@
         <meta http-equiv="x-ua-compatible" content="ie=edge">
         <title>产品介绍页面</title>
         <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
 
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
         <!-- Place favicon.ico in the root directory -->
@@ -18,6 +18,10 @@
     </head>
   <body>
       <!-- 居中内容区  -->
+      <!--  详细介绍页面大banner  -->
+      <div class="bigbanner">
+          <img class="teamall" alt="">
+      </div>
       <div class="w1000">
         <div id="menu">
               <img src="images/nav_logo.png">
@@ -29,12 +33,6 @@
                 <li><a href="newlist.html">媒体报告</a></li>
               </ul>
           </div>
-        <!--  详细介绍页面大banner  -->
-        <div class="bigbanner mt170">
-            <img class="teamall" alt="">
-            <img class="teamlogo" alt="">
-        </div>
-
         <!--  弹框播放器    -->
         <div id="myModal1" class="reveal-modal">
           <a class="close-reveal-modal">×</a>
@@ -48,12 +46,9 @@
 
             <div class="posterright">
               <div class="postertitle"></div>
-              <div class="gameteam">
+              <div class="gameintroduct">
               </div>
-              <div class="gamevideo">
-                <span class="gamespangrey"><label>1</label>个视频>></span>
-                <div class="swiper-container" id="productlist">
-                </div>
+              <div class="gameteam">
               </div>
             </div>
         </div>
@@ -101,34 +96,42 @@
                   return undefined;
               }
           }
+          function unique(arr) {
+               var result = [], isRepeated;
+               for (var i = 0, len = arr.length; i < len; i++) {
+                   isRepeated = false;
+                   for (var j = 0, len = result.length; j < len; j++) {
+                       if (arr[i] == result[j]) {
+                           isRepeated = true;
+                           break;
+                       }
+                   }
+                   if (!isRepeated) {
+                       result.push(arr[i]);
+                   }
+               }
+               return result;
+           }
           $.ajax({
               type: "get",
               //timeout: 2000,
               async: false,
-              data:{
-                limit:0
-              },
               url: "http://139.196.237.72:3010/api/v1/products/"+getid('id')+"",
               success: function(res) {
-                  console.log(res)
-                  $(".bigbanner img:eq(0)").attr("src",res.data[0].posterimg);
-                  $(".bigbanner img:eq(1)").attr("src",res.data[0].logo);
+                  $(".bigbanner .teamall").attr("src",res.data[0].imgs.split(',')[0]);
                   $(".posterleft img").attr("src",res.data[0].backimg);
                   $(".postertitle").html(res.data[0].name);
-                  $(".gameteam").html('<p><label>创作团队:</label> '+res.data[0].teamname+'</p><img src='+res.data[0].logo+' alt="">');
-                  $("#productlist").html('<a href="#" data-reveal-id="myModal1"><img class="sliderimg" src='+res.data[0].posterimg+' alt=""></a>');
+                  $(".gameteam").html('<p><label>创作团队:</label> '+ unique(res.data[0].teamname.split(','))+'</p><img src='+res.data[0].logo+' alt="">');
+                  $(".gameintroduct").html('<label>剧情介绍:</label> '+ res.data[0].introduction +'');
                   var imgmath = res.data[0].imgs.split(',');
                   var html = ''
-                  for (var i = 0; i < imgmath.length; i++) {
+                  html +='<div><a href="#" data-reveal-id="myModal1"><img class="sliderimg" src='+imgmath[1]+' alt=""></a></div>'
+                  for (var i = 2; i < imgmath.length; i++) {
                     html +='<div><img src="'+ imgmath[i] +'"></div>'
                   }
                   $("#productimglist .swiper-slide").html(html)
                   $('.sliderimg').on("click", function() {
-                      $('#myModal1').prepend('<a class="media" href="http://139.196.237.72:80/'+ res.data[0].videos +'"></a>');
-                      $('.media').media({
-                          width: 600,
-                          height: 450
-                      });
+                      $('#myModal1').prepend('<video src='+ res.data[0].videos +' id="proplayer" controls="controls" width="658" height="444"></video>');
                   });
               },
               error: function(err) {

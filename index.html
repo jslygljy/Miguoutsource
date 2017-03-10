@@ -5,7 +5,7 @@
         <meta http-equiv="x-ua-compatible" content="ie=edge">
         <title>首页</title>
         <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
 
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
         <!-- Place favicon.ico in the root directory -->
@@ -21,11 +21,10 @@
             <img src="images/nav_logo.png">
             <ul>
               <li data-menuanchor="firstPage" class="active"><a href="#firstPage">首页</a></li>
-              <li data-menuanchor="secondPage"><a href="#secondPage">关于ALAYA</a></li>
-              <li data-menuanchor="3rdPage"><a href="#3rdPage">内容与体验</a></li>
-              <li data-menuanchor="4rdPage"><a href="#3rdPage">造梦师</a></li>
-              <li data-menuanchor="5rdPage"><a href="#3rdPage">媒体报道</a></li>
-              <li data-menuanchor="6rdPage"><a href="#3rdPage">关于我们</a></li>
+              <li data-menuanchor="secondPage"><a href="#secondPage">内容与体验</a></li>
+              <li data-menuanchor="3rdPage"><a href="#3rdPage">造梦师</a></li>
+              <li data-menuanchor="4rdPage"><a href="#3rdPage">关于ALAYA</a></li>
+              <li data-menuanchor="5rdPage"><a href="#4rdPage">关于我们</a></li>
             </ul>
         </div>
         <!--  fullpage框架  -->
@@ -34,8 +33,8 @@
               <img src="images/index_logo.png">
               <br>
               <span class="park"></span>
-              <p>带领你跨入奥境之门<br>领略奥妙无穷的虚拟现实世界</p>
-              <a class="see" href="">See More</a>
+              <p style="color:#c4192c;font-weight:bold">来这里<br>做一场不愿醒来的梦</p>
+              <a class="see" href="#secondPage">Start  Here</a>
           </div>
           <div class="section" id="section1">
               <div class="device">
@@ -58,7 +57,7 @@
 
               <ul class="new_list">
               </ul>
-              <a class="see" href="">See More</a>
+              <a class="see" href="productList.html">See More</a>
           </div>
           <div class="section" id="section2">
             <div class="w1000">
@@ -68,13 +67,15 @@
               </div>
                 <script type="text/temple" id="teamlist">
                 <div class="indexteamlist">
+                    <a href="teamdetail.html?id={id}">
                     <div class="indexteamleft">
                         <img {logo} alt="">
                     </div>
                     <div class="indexteamright">
                       {content}
                     </div>
-                    <a href="teamdetail.html?id={id}">走进{name}</a>
+                    </a>
+                    <a class="walktoteam" href="teamdetail.html?id={id}">走进{name}</a>
                 </div>
                 </script>
           </div>
@@ -82,33 +83,28 @@
               <img src="images/map.png">
           </div>
           <div class="section" id="section4">
-              <div style="margin-bottom:50px;"><img src="images/nav_logo.png"></div>
+              <div style="margin-bottom:50px;" class="bottomimg"><img src="images/nav_logo.png"></div>
               <ul>
                 <li><img src="images/redlogo.png"></li>
-                <li><a href="">关于ALAYA</a></li>
-                <li><a href="">内容与体验</a></li>
-                <li><a href="">媒体声音</a></li>
-                <li><a href="">关于我们</a></li>
+                <li><a href="about.html">关于ALAYA</a></li>
+                <li><a href="productList.html">内容与体验</a></li>
+                <li><a href="newlist.html">媒体声音</a></li>
               </ul>
-              <ul>
+              <ul class="bottomui">
                 <li class="footer_first">友情链接</li>
-                <li><a href="">锐 瞳</a></li>
+                <li><a href="http://www.keenvision.cn/" target="_blank">上海锐瞳网络科技</a></li>
+                <li><a href="http://www.vsensory.com/"  target="_blank">Vsensory - 喂啊科技</a></li>
+                <li><a href="http://migu99.com/"  target="_blank">米谷官网</a></li>
               </ul>
-              <ul>
+              <ul class="bottomui">
                 <li class="footer_first">关注我们</li>
-                <a href="">Facebook</a>
-                <a href="">Youtube</a>
-                <a href="">Weibo</a>
-                <a href="">WeChat</a>
+                <a>微信公众号</a>
+                <img src="images/encode.jpg" style="width: 137px;">
               </ul>
-              <ul>
+              <ul class="bottomui">
                 <li class="footer_first">联系我们</li>
-                <li><a href="">alaya@email.com</a></li>
-                <li><a href="">0512——1234567</a></li>
-              </ul>
-              <ul>
-                <li class="footer_first">商务接洽</li>
-                <li><a href="">16955555556</a></li>
+                <li><a href="mailto:chenruolan@alayapark.com">chenruolan@alayapark.com</a></li>
+                <li><a href="tel:18867120552">188-6712-0552</a></li>
               </ul>
           </div>
         </div>
@@ -128,7 +124,7 @@
 
                   var html = ''
                   for (var i = 0; i < 3; i++) {
-                    html += '<li><label>Top '+(i+1)+'</label><a href="newdetail?id='+res.data[i].id+'">'+res.data[i].name+'</a></li>'
+                    html += '<li><label>Top '+(i+1)+'</label><a href="newdetail.html?id='+res.data[i].id+'">'+res.data[i].name+'</a></li>'
                   }
                 $(".new_list").html(html);
               },
@@ -136,7 +132,38 @@
                   //alert(JSON.stringify(err));
               }
           })
+          // 首页banner
+    $.ajax({
+        type: "get",
+        data: {
+            limit: 0
+        },
+        url: "http://139.196.237.72:3010/api/v1/products",
+        success: function(res) {
+            if (res.data.length != 0) {
+                var itemTemplate = $('#index_product_list').html();
+                var html = res.data.map(function(item, index) {
+                    return itemTemplate
+                        .replace('{editid}', item.id)
+                        .replace('{font}', item.introduction)
+                        .replace('{imgs}', 'src="' + item.posterimg + '"');
+                }).join('');
 
+                $("#index_product .swiper-wrapper").html(html);
+                var mySwiper = new Swiper('#index_product', {
+                    grabCursor: true,
+                    paginationClickable: true,
+                    pagination : '.device .pagination',
+                });
+            } else {
+                $("#index_product .swiper-wrapper").html('');
+            }
+
+        },
+        error: function(err) {
+            //alert(JSON.stringify(err));
+        }
+    })
           $.ajax({
               type: "get",
               data: {

@@ -5,7 +5,7 @@
         <meta http-equiv="x-ua-compatible" content="ie=edge">
         <title>新闻详细</title>
         <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
 
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
         <!-- Place favicon.ico in the root directory -->
@@ -15,20 +15,24 @@
         <link rel="stylesheet" type="text/css" href="css/jquery.fullPage.css">
         <link rel="stylesheet" type="text/css" href="css/idangerous.swiper.css">
     </head>
-    <body>
+    <body style="background-color:#fff;">
+        <div style="widht:100%;height:450px;background-color: #0f1419;"></div>
         <div class="w1000">
-            <div id="menu">
-                <img src="images/nav_logo.png">
-                <ul>
-                  <li data-menuanchor="firstPage" class="active"><a href="#firstPage">首页</a></li>
-                  <li data-menuanchor="secondPage"><a href="#secondPage">关于ALAYA</a></li>
-                  <li data-menuanchor="3rdPage"><a href="#3rdPage">内容与体验</a></li>
-                  <li data-menuanchor="4rdPage"><a href="#3rdPage">造梦师</a></li>
-                  <li data-menuanchor="5rdPage"><a href="#3rdPage">媒体报道</a></li>
-                  <li data-menuanchor="6rdPage"><a href="#3rdPage">关于我们</a></li>
-                </ul>
-            </div>
-            <img class="newdetailimg" alt="" style="width:100%;height:300px;margin-top:100px;">
+          <div id="menu">
+              <img src="images/nav_logo.png">
+              <ul>
+                <li><a href="index.html">首页</a></li>
+                <li><a href="productList.html">内容与体验</a></li>
+                <li data-menuanchor="4rdPage"><a href="index.html#3rdPage">造梦师</a></li>
+                <li><a href="about.html">关于Alaya</a></li>
+                <li class="active"><a href="newlist.html">媒体报告</a></li>
+              </ul>
+          </div>
+            <img class="newdetailimg" alt="" style="    width: 100%;
+    height: 300px;
+    margin-top: -300px;
+    display: inline-block;
+    vertical-align: top;">
             <div class="newdetail">
                 <h1></h1>
                 <p></p>
@@ -55,6 +59,9 @@
                 },
                 url: "http://139.196.237.72:3010/api/v1/news/"+getid('id')+"",
                 success: function(res) {
+                    if (res.data[0].isteam == 0 && res.data[0].type == 2) {
+                        window.location.href=''+ res.data[0].linkurl +''
+                    }
                     $(".newdetailimg").attr("src",res.data[0].banner)
                     $(".newdetail h1").html(res.data[0].name)
                     $(".newdetail p").html(res.data[0].detail)

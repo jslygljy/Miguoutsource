@@ -5,7 +5,7 @@
         <meta http-equiv="x-ua-compatible" content="ie=edge">
         <title>媒体报告</title>
         <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
 
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
         <!-- Place favicon.ico in the root directory -->
@@ -21,12 +21,11 @@
           <div id="menu">
               <img src="images/nav_logo.png">
               <ul>
-                <li data-menuanchor="firstPage" class="active"><a href="#firstPage">首页</a></li>
-                <li data-menuanchor="secondPage"><a href="#secondPage">关于ALAYA</a></li>
-                <li data-menuanchor="3rdPage"><a href="#3rdPage">内容与体验</a></li>
-                <li data-menuanchor="4rdPage"><a href="#3rdPage">造梦师</a></li>
-                <li data-menuanchor="5rdPage"><a href="#3rdPage">媒体报道</a></li>
-                <li data-menuanchor="6rdPage"><a href="#3rdPage">关于我们</a></li>
+                <li><a href="index.html">首页</a></li>
+                <li><a href="productList.html">内容与体验</a></li>
+                <li data-menuanchor="4rdPage"><a href="index.html#3rdPage">造梦师</a></li>
+                <li><a href="about.html">关于Alaya</a></li>
+                <li class="active"><a href="newlist.html">媒体报告</a></li>
               </ul>
           </div>
           <div class="newsection">
@@ -35,7 +34,7 @@
               <div class="new_list">
                   <img {banner}>
                   <div class="new_right">
-                    <a href="newdetail.html?id={id}">
+                    <a href="{href}">
                         <h4>{title}</h4>
                         <p>{introduction}</p>
                     </a>
@@ -45,6 +44,16 @@
         </div>
         <script src="js/vendor/jquery-1.12.0.min.js"></script>
         <script type="text/javascript">
+        $.ajax({
+            type: "get",
+            url: "http://139.196.237.72:3010/api/v1/count/news",
+            success: function(res) {
+              console.log(res)
+            },
+            error: function(err) {
+                //alert(JSON.stringify(err));
+            }
+        })
             $.ajax({
                 type: "get",
                 data: {
@@ -54,17 +63,23 @@
                 success: function(res) {
                   if (res.data.length != 0) {
                       var itemTemplate = $('#newlist').html();
+                      var href="";
                       var html = res.data.map(function(item, index) {
+                          if ((item.isteam == 0 && item.type == 2)) {
+                            href=''+item.linkurl+''
+                          }else{
+                            href="newdetail.html?id={id}"
+                          }
                           return itemTemplate
                               .replace('{banner}', 'src="' + item.banner.split(',')[0] + '"')
+                              .replace('{href}', href)
                               .replace('{id}', item.id)
                               .replace('{title}', item.name)
                               .replace('{introduction}', item.introduction)
                       }).join('');
-
-                      $(".newsection").append(html);
+                      $(".newsection").html(html);
                   } else {
-                      $(".newsection").append('');
+                      $(".newsection").html('');
                   }
                 },
                 error: function(err) {

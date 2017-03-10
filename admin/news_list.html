@@ -58,29 +58,36 @@
                       </tr>
                     </thead>
                     <tbody id="newslist">
-                      <tr>
-                        <td>{name}</td>
-                        <td>{about}</td>
-                        <td>{num}</td>
-                        <td>{type}</td>
-                        <td>{newsblooen}</td>
-                        <td>
-                          <div class="btn-group">
-                            <a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#">
-                            操作
-                              <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu pull-right">
-                              <li><a href="news_add.html?id={editid}"><i class="icon-edit"></i>修改</a></li>
-                              <li id="dellist" name={delid}><a href="#"><i class="icon-trash"></i>删除</a></li>
-                            </ul>
-                          </div>
-                        </td>
-                      </tr>
 
                     </tbody>
                   </table>
                 </div> <!-- /widget-body -->
+                <script type="text/temple" id="newshtml">
+                    <tr>
+                      <td>{name}</td>
+                      <td>{about}</td>
+                      <td>{num}</td>
+                      <td>{type}</td>
+                      <td>{newsblooen}</td>
+                      <td>
+                        <div class="btn-group">
+                          <a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#">
+                          操作
+                            <span class="caret"></span>
+                          </a>
+                          <ul class="dropdown-menu pull-right">
+                            <li><a href="news_add.html?id={editid}"><i class="icon-edit"></i>修改</a></li>
+                            <li id="dellist" name={delid}><a href="#"><i class="icon-trash"></i>删除</a></li>
+                          </ul>
+                        </div>
+                      </td>
+                    </tr>
+                </script>
+                <div class="pagination">
+                  <ul>
+
+                  </ul>
+                </div>
               </div> <!-- /widget -->
             </div> <!-- /row-fluid -->
 
@@ -129,11 +136,169 @@
         data:{
           limit:0
         },
+        url: "http://139.196.237.72:3010/api/v1/count/news",
+        success: function(res) {
+           var html = '';
+           var prePage = '<li class="prev"><a href="#">Prev</a></li>';
+           var nextPage ='<li class="next"><a href="#">Next</a></li>';
+           var pagenum = Math.ceil(res.data[0].num/5);
+           var currnum = 0;
+           for (var i = 1; i <=pagenum; i++) {
+               html +='<li class="pagenum" num='+i+'><a href="#">'+i+'</a></li>';
+           }
+           $(".pagination ul").html(prePage+html+nextPage);
+
+           $(".prev").click(function(){
+             $.ajax({
+                 type: "get",
+                 //timeout: 2000,
+                 async: false,
+                 data:{
+                   limit: currnum *5
+                 },
+                 url: 'http://139.196.237.72:3010/api/v1/news',
+                 success: function(res) {
+                   if (res.data.length != 0) {
+                 		   var itemTemplate = $('#newshtml').html();
+                       var html = res.data.map(function(item,index) {
+                       var isboolen = item.ismajor;
+                       var typename;
+                       if (isboolen) {
+                         isboolen = '是'
+                       }else{
+                         isboolen = '否'
+                       }
+                       if (item.isteam ==0) {
+                           typename = ['内部新闻','媒体外链','内容与体验']
+                       }else{
+                           typename = ['团队咨询','造梦师专访']
+                       }
+                         return itemTemplate
+                         	.replace('{name}', item.name)
+                           .replace('{editid}', item.id)
+                           .replace('{delid}', item.id)
+                   		.replace('{about}', item.introduction)
+                       .replace('{num}', item.heat)
+                       .replace('{type}', typename[item.type-1])
+                       .replace('{newsblooen}', isboolen)
+                     }).join('');
+
+                     $("#newslist").html(html);
+                 	}else{
+                     $("#newslist").html('');
+                 	}
+                 },
+                 error: function(err) {
+                     //alert(JSON.stringify(err));
+                 }
+             });
+           })
+           $(".pagenum").click(function(){
+             $.ajax({
+                 type: "get",
+                 //timeout: 2000,
+                 async: false,
+                 data:{
+                   limit: ($(this).attr('num')-1) *5
+                 },
+                 url: 'http://139.196.237.72:3010/api/v1/news',
+                 success: function(res) {
+                   console.log(res)
+                   if (res.data.length != 0) {
+                 		var itemTemplate = $('#newshtml').html();
+                         var html = res.data.map(function(item,index) {
+                         var isboolen = item.ismajor;
+                         var typename;
+                         if (isboolen) {
+                           isboolen = '是'
+                         }else{
+                           isboolen = '否'
+                         }
+                         if (item.isteam ==0) {
+                             typename = ['内部新闻','媒体外链','内容与体验']
+                         }else{
+                             typename = ['团队咨询','造梦师专访']
+                         }
+                           return itemTemplate
+                           	.replace('{name}', item.name)
+                             .replace('{editid}', item.id)
+                             .replace('{delid}', item.id)
+                     		.replace('{about}', item.introduction)
+                         .replace('{num}', item.heat)
+                         .replace('{type}', typename[item.type-1])
+                         .replace('{newsblooen}', isboolen)
+                       }).join('');
+
+                     $("#newslist").html(html);
+                 	}else{
+                     $("#newslist").html('');
+                 	}
+                 },
+                 error: function(err) {
+                 }
+             });
+           })
+           $(".next").click(function(){
+             $.ajax({
+                 type: "get",
+                 //timeout: 2000,
+                 async: false,
+                 data:{
+                   limit: (currnum +1) *5
+                 },
+                 url: 'http://139.196.237.72:3010/api/v1/news',
+                 success: function(res) {
+                   if (res.data.length != 0) {
+                 		var itemTemplate = $('#newshtml').html();
+                         var html = res.data.map(function(item,index) {
+                         var isboolen = item.ismajor;
+                         var typename;
+                         if (isboolen) {
+                           isboolen = '是'
+                         }else{
+                           isboolen = '否'
+                         }
+                         if (item.isteam ==0) {
+                             typename = ['内部新闻','媒体外链','内容与体验']
+                         }else{
+                             typename = ['团队咨询','造梦师专访']
+                         }
+                           return itemTemplate
+                           	.replace('{name}', item.name)
+                             .replace('{editid}', item.id)
+                             .replace('{delid}', item.id)
+                     		.replace('{about}', item.introduction)
+                         .replace('{num}', item.heat)
+                         .replace('{type}', typename[item.type-1])
+                         .replace('{newsblooen}', isboolen)
+                       }).join('');
+
+                     $("#newslist").html(html);
+                 	}else{
+                     $("#newslist").html('');
+                 	}
+                 },
+                 error: function(err) {
+                     //alert(JSON.stringify(err));
+                 }
+             });
+           })
+        },
+        error: function(err) {
+            //alert(JSON.stringify(err));
+        }
+    });
+    $.ajax({
+        type: "get",
+        //timeout: 2000,
+        async: false,
+        data:{
+          limit:0
+        },
         url: "http://139.196.237.72:3010/api/v1/news",
         success: function(res) {
-            console.log(res)
             if (res.data.length != 0) {
-          		var itemTemplate = $('#newslist').html();
+          		var itemTemplate = $('#newshtml').html();
                   var html = res.data.map(function(item,index) {
                   var isboolen = item.ismajor;
                   var typename;

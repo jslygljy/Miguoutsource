@@ -92,6 +92,8 @@
                             unlockModal()
                         }
                     }
+                    var myVideo = document.getElementById('proplayer');
+                    myVideo.play();
                     modal.unbind('reveal:open');
                 });
 
@@ -156,8 +158,10 @@
                         "cursor": "pointer"
                     })
                     modalBG.bind('click.modalEvent', function() {
-                        modal.trigger('reveal:close')
-                        $(".media").remove();
+                        modal.trigger('reveal:close');
+                        var myVideo = document.getElementById('proplayer');
+                        myVideo.pause();
+                        $("#proplayer").remove();
                     });
                 }
                 /*			$('body').keyup(function(e) {
